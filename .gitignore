@@ -1,0 +1,13 @@
+# OS generated files #
+.DS_Store
+
+# Node
+/node_modules/
+npm-debug.log
+
+# Coverage
+/coverage/
+
+# Dist
+/aot/
+/dist/
