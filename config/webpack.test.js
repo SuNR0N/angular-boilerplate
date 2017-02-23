@@ -1,10 +1,11 @@
 const helpers = require('./helpers');
+const cfg = require('./configuration');
 
 // Webpack Plugins
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 
 // Webpack Constants
-const ENV = process.env.ENV = process.env.NODE_ENV = helpers.env.TEST;
+const ENV = process.env.ENV = process.env.NODE_ENV = cfg.Env.TEST;
 
 // Webpack Configuration
 module.exports = function (options) {
@@ -22,6 +23,15 @@ module.exports = function (options) {
         },
         module: {
             rules: [
+                {
+                    enforce: 'pre',
+                    test: /\.js$/,
+                    loader: 'source-map-loader',
+                    exclude: [
+                        helpers.pathFromRoot('node_modules/rxjs'),
+                        helpers.pathFromRoot('node_modules/@angular')
+                    ]
+                },
                 {
                     test: /\.tsx?$/,
                     use: [
@@ -66,11 +76,11 @@ module.exports = function (options) {
                 },
                 {
                     enforce: 'post',
-                    test: /\.(js|ts)$/,
+                    test: /\.(js|tsx?)$/,
                     loader: 'istanbul-instrumenter-loader',
                     include: helpers.pathFromRoot('src'),
                     exclude: [
-                        /\.(e2e|spec)\.ts$/,
+                        /\.(e2e|spec)\.tsx?$/,
                         /node_modules/
                     ]
                 }

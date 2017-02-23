@@ -1,6 +1,6 @@
-const helpers = require('./helpers');
+const cfg = require('./configuration');
 
-const ENV = helpers.env.TEST;
+const ENV = cfg.Env.TEST;
 
 module.exports = function(config) {
   var testWebpackConfig = require('./webpack.test')({ env: ENV });

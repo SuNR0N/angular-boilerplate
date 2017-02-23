@@ -1,25 +1,25 @@
 const path = require('path');
+const cfg = require('./configuration');
 
 const TARGET = process.env.npm_lifecycle_event || '';
 const ROOT = path.resolve(__dirname, '..');
-const ENVIRONMENTS = {
-    DEV: 'dev',
-    DEVELOPMENT: 'development',
-    TEST: 'test',
-    PROD: 'prod',
-    PRODUCTION: 'production'
-};
-const PORTS = {
-    BACKEND: 3001,
-    CLIENT: 3000,
-    WEB_SERVER: 8080
-};
-const NPM_TARGET_VARS = {
-    AOT: 'aot'
-};
 
 function npmTargetContains (value) {
+    console.log('NPM TARGET CONTAINS', value, TARGET.includes(value));
     return TARGET.includes(value);
+};
+
+function isNodeTarget (value) {
+    const targetPathSegments = process.argv[1].split(path.sep);
+    const target = targetPathSegments[targetPathSegments.length - 1];
+
+    return target === value;
+};
+
+function hasArgumentForNodeTarget (value) {
+    const args = process.argv.slice(2);
+
+    return args.join('').includes(value);
 };
 
 function pathFromRoot (...pathSegments) {
@@ -27,12 +27,20 @@ function pathFromRoot (...pathSegments) {
 };
 
 function isAOT () {
-    return npmTargetContains(NPM_TARGET_VARS.AOT);
+    return npmTargetContains(cfg.NpmTargetVariable.AOT);
+};
+
+function isHMR () {
+    return hasArgumentForNodeTarget(cfg.NodeExecutableArgument.HOT);
+}
+
+function isWebpackDevServer () {
+    return isNodeTarget(cfg.NodeExecutable.WEBPACK_DEV_SERVER);
 };
 
 module.exports = {
-    env: ENVIRONMENTS,
-    port: PORTS,
     pathFromRoot,
-    isAOT
+    isAOT,
+    isHMR,
+    isWebpackDevServer
 };

@@ -1,15 +1,18 @@
 const webpackMerge = require('webpack-merge');
 const helpers = require('./helpers');
+const cfg = require('./configuration');
 const commonConfig = require('./webpack.common');
 
 // Webpack Constants
-const ENV = process.env.ENV = process.env.NODE_ENV = helpers.env.DEVELOPMENT;
-const HOST = process.env.HOST || 'localhost';
-const PORT = process.env.PORT || helpers.port.CLIENT;
+const ENV = process.env.ENV = process.env.NODE_ENV = cfg.Env.DEVELOPMENT;
+const HOST = process.env.HOST || cfg.Host.LOCALHOST;
+const PORT = process.env.PORT || cfg.Port.CLIENT;
+const HMR = helpers.isHMR();
 const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
     host: HOST,
     port: PORT,
-    ENV: ENV
+    ENV: ENV,
+    HMR: HMR
 });
 
 // Webpack Configuration
@@ -67,7 +70,7 @@ module.exports = function (options) {
             },
             proxy: {
                 '/api/*': {
-                    target: `http://localhost:${helpers.port.BACKEND}`,
+                    target: `http://localhost:${cfg.Port.BACKEND}`,
                     secure: false
                 }
             }

@@ -1,9 +1,10 @@
 require('ts-node/register');
 
 const helpers = require('./helpers');
+const cfg = require('./configuration');
 
 exports.config = {
-    baseUrl: `http://localhost:${helpers.port.CLIENT}/`,
+    baseUrl: `http://localhost:${cfg.Port.CLIENT}/`,
 
     specs: [
         helpers.pathFromRoot('e2e/**/*.e2e.ts')

@@ -1,5 +1,6 @@
 const webpackMerge = require('webpack-merge');
 const helpers = require('./helpers');
+const cfg = require('./configuration');
 const commonConfig = require('./webpack.common');
 
 // Webpack Plugins
@@ -8,15 +9,16 @@ const OptimizeJsPlugin = require('optimize-js-plugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 
 // Webpack Constants
-const ENV = process.env.ENV = process.env.NODE_ENV = helpers.env.PRODUCTION;
-const HOST = process.env.HOST || 'localhost';
-const PORT = process.env.PORT || helpers.port.WEB_SERVER;
+const ENV = process.env.ENV = process.env.NODE_ENV = cfg.Env.PRODUCTION;
+const HOST = process.env.HOST || cfg.Host.LOCALHOST;
+const PORT = process.env.PORT || cfg.Port.WEB_SERVER;
 const METADATA = webpackMerge(commonConfig({ 
     env: ENV 
 }).metadata, {
     host: HOST,
     port: PORT,
-    ENV: ENV
+    ENV: ENV,
+    HMR: false
 });
 
 // Webpack Configuration
@@ -24,6 +26,7 @@ module.exports = function (options) {
     return webpackMerge(commonConfig({ 
         env: ENV 
     }), {
+        devtool: 'source-map',
         output: {
             path: helpers.pathFromRoot('dist'),
             filename: '[name].[chunkhash].bundle.js',
@@ -54,7 +57,7 @@ module.exports = function (options) {
             new OptimizeJsPlugin({
                 sourceMap: false
             }),
-            new ExtractTextPlugin('[name].[chunkhash].css'),
+            new ExtractTextPlugin('[name].[contenthash].css'),
             new UglifyJsPlugin({
                 beautify: false,
                 output: {

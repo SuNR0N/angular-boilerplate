@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const helpers = require('./helpers');
 
 // Webpack Plugins
+const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -10,9 +11,11 @@ const ngcWebpack = require('ngc-webpack');
 
 // Webpack Constants
 const AOT = helpers.isAOT();
+const HMR = helpers.isHMR();
 const METADATA = {
     title: 'Boilerplate Angular CRUD Application',
-    baseUrl: '/'
+    baseUrl: '/',
+    isDevServer: helpers.isWebpackDevServer()
 };
 
 // Webpack Configuration
@@ -95,6 +98,7 @@ module.exports = function (options) {
             ]
         },
         plugins: [
+            new CheckerPlugin(),
             new CommonsChunkPlugin({
                 name: 'polyfills',
                 chunks: [ 'polyfills' ]

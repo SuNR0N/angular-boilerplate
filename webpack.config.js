@@ -1,15 +1,14 @@
-const helpers = require('./config/helpers');
-const ENV = helpers.env;
+const cfg = require('./config/configuration');
 
 switch (process.env.NODE_ENV) {
-    case ENV.PROD:
-    case ENV.PRODUCTION:
-        module.exports = require('./config/webpack.prod')({ env: ENV.PRODUCTION });
+    case cfg.Env.PROD:
+    case cfg.Env.PRODUCTION:
+        module.exports = require('./config/webpack.prod')({ env: cfg.Env.PRODUCTION });
         break;
-    case ENV.TEST:
-        module.exports = require('./config/webpack.test')({ env: ENV.TEST });    
-    case ENV.DEV:
-    case ENV.DEVELOPMENT:
+    case cfg.Env.TEST:
+        module.exports = require('./config/webpack.test')({ env: cfg.Env.TEST });    
+    case cfg.Env.DEV:
+    case cfg.Env.DEVELOPMENT:
     default:
-        module.exports = require('./config/webpack.dev')({ env: ENV.DEVELOPMENT });
+        module.exports = require('./config/webpack.dev')({ env: cfg.Env.DEVELOPMENT });
 }
