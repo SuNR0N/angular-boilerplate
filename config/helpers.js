@@ -5,7 +5,6 @@ const TARGET = process.env.npm_lifecycle_event || '';
 const ROOT = path.resolve(__dirname, '..');
 
 function npmTargetContains (value) {
-    console.log('NPM TARGET CONTAINS', value, TARGET.includes(value));
     return TARGET.includes(value);
 };
 
