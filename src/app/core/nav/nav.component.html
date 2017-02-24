@@ -1,0 +1,12 @@
+<header>
+    <nav>
+        <a *ngFor="let item of menuItems"
+            md-raised-button
+            [routerLink]="item.link"
+            routerLinkActive="router-link-active"
+            class="mat-button"
+            href="">
+            {{ item.caption }}
+        </a>
+    </nav>
+</header>
