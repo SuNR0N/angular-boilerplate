@@ -27,7 +27,7 @@
   "exclude": [
     "node_modules",
     "dist",
-    "src/*-aot.ts",
+    "src/main-aot.ts",
     "src/**/*.spec.ts",
     "e2e/**/*.ts"
   ],

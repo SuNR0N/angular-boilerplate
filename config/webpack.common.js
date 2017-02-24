@@ -7,6 +7,7 @@ const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 const ngcWebpack = require('ngc-webpack');
 
 // Webpack Constants
@@ -52,7 +53,7 @@ module.exports = function (options) {
                         {
                             loader: 'awesome-typescript-loader',
                             options: {
-                                configFileName: 'tsconfig.webpack.json'
+                                configFileName: AOT ? 'tsconfig.aot.json' : 'tsconfig.jit.json'
                             }
                         },
                         {
@@ -98,6 +99,13 @@ module.exports = function (options) {
             ]
         },
         plugins: [
+            new TypedocWebpackPlugin(
+                {
+                    out: helpers.pathFromRoot('docs'),
+                    exclude: '**/*+(spec|main-' + (AOT ? 'jit' : 'aot') + ').ts'
+                },
+                helpers.pathFromRoot('src')
+            ),
             new CheckerPlugin(),
             new CommonsChunkPlugin({
                 name: 'polyfills',
@@ -130,7 +138,7 @@ module.exports = function (options) {
             }),
             new ngcWebpack.NgcWebpackPlugin({
                 disabled: !AOT,
-                tsConfig: helpers.pathFromRoot('tsconfig.webpack.json')
+                tsConfig: helpers.pathFromRoot('tsconfig.aot.json')
             })
         ],
         node: {

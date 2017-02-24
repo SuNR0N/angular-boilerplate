@@ -5,9 +5,14 @@
 /node_modules/
 npm-debug.log
 
+# Build
+/aot/
+
 # Coverage
 /coverage/
 
 # Dist
-/aot/
 /dist/
+
+# Docs
+/docs/

@@ -2,9 +2,9 @@
   "compilerOptions": {
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": [ 
-        "es2015", 
-        "dom" 
+    "lib": [
+        "es2015",
+        "dom"
     ],
     "typeRoots": [
       "node_modules/@types"
@@ -16,15 +16,22 @@
       "sinon",
       "node"
     ],
-    "module": "commonjs",
+    "module": "es2015",
     "moduleResolution": "node",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "sourceMap": true,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "es5"
+    "target": "es5",
+    "outDir": "aot"
   },
   "exclude": [
     "node_modules",
-    "dist"
-  ]
+    "dist",
+    "src/**/*.spec.ts",
+    "e2e/**/*.ts"
+  ],
+  "angularCompilerOptions": {
+    "genDir": "aot",
+    "skipMetadataEmit": true
+  }
 }
