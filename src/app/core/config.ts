@@ -1,5 +1,5 @@
 export const CONFIG = {
     baseUrls: {
-        books: 'api/books'
+        books: '/api/books'
     }
 };

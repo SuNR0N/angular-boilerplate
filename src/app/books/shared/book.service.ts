@@ -3,14 +3,16 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { Book } from './book.model';
-import { CONFIG } from '../../core';
+import { CONFIG, ExceptionService } from '../../core';
 
 const booksUrl = CONFIG.baseUrls.books;
 
 @Injectable()
 export class BookService {
 
-    constructor(private http: Http) { }
+    constructor(
+        private http: Http,
+        private exceptionService: ExceptionService) { }
 
     createBook(book: Book) {
         // TODO
@@ -25,10 +27,16 @@ export class BookService {
     }
 
     getBooks() {
-        // TODO
+        return <Observable<Book[]>> this.http
+            .get(booksUrl)
+            .map((res) => res.json())
+            .catch(this.exceptionService.catchErrorResponse);
     }
 
-    getBook(id: number) {
-        // TODO
+    getBook(id: string) {
+        return <Observable<Book>> this.http
+            .get(`${booksUrl}/${id}`)
+            .map((res) => res.json())
+            .catch(this.exceptionService.catchErrorResponse);
     }
 }

@@ -1,7 +1,8 @@
 <h2>Books</h2>
 
 <ul>
-    <li *ngFor="let book of books">
-        {{ book }}
+    <li *ngFor="let book of books"
+        (click)="onSelect(book)">
+        <span>{{ book.title }}</span>
     </li>
 </ul>

@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@angular/material';
 import 'hammerjs';
 
+import { ExceptionService } from './exception.service';
 import { NavComponent } from './nav/nav.component';
 
 @NgModule({
@@ -22,6 +23,6 @@ import { NavComponent } from './nav/nav.component';
         NavComponent
     ],
     declarations: [NavComponent],
-    providers: [],
+    providers: [ExceptionService],
 })
 export class CoreModule { }

@@ -11,6 +11,6 @@ import { BookService } from './shared/book.service';
         BooksRoutingModule
     ],
     declarations: [routedComponents],
-    providers: [BookService],
+    providers: [BookService]
 })
 export class BooksModule { }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Book } from '../shared/book.model';
 import { BookService } from '../shared/book.service';
@@ -11,14 +12,31 @@ import { BookService } from '../shared/book.service';
 export class BookListComponent implements OnInit {
     books: Book[];
 
-    constructor(private bookService: BookService) { }
+    constructor(
+        private bookService: BookService,
+        private router: Router) { }
 
     ngOnInit() {
         this.getBooks();
     }
 
-    private getBooks() {
+    getBooks() {
         this.books = [];
-        this.bookService.getBooks();
+        this.bookService.getBooks().subscribe(
+            (books) => {
+                this.books = books;
+            },
+            (error) => {
+                console.log('Failed to retrieve books');
+                console.log(error);
+            },
+            () => {
+                console.log('List of books has been successfully retrieved');
+            }
+        );
+    }
+
+    onSelect(book: Book) {
+        this.router.navigate(['/books', book.isbn]);
     }
 }
