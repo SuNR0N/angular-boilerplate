@@ -1,3 +1,4 @@
+const autoprefixer = require('autoprefixer');
 const webpackMerge = require('webpack-merge');
 const webpackMergeDll = webpackMerge.strategy({plugins: 'replace'});
 const helpers = require('./helpers');
@@ -7,6 +8,7 @@ const commonConfig = require('./webpack.common');
 // Webpack Plugins
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const DllBundlesPlugin = require('webpack-dll-bundles-plugin').DllBundlesPlugin;
+const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 
 // Webpack Constants
 const ENV = process.env.ENV = process.env.NODE_ENV = cfg.Env.DEVELOPMENT;
@@ -78,12 +80,12 @@ module.exports = function (options) {
                         }
                     ],
                     vendor: [
-                        '@angular/common',
-                        '@angular/core',
-                        '@angular/forms',
-                        '@angular/http',
                         '@angular/platform-browser',
                         '@angular/platform-browser-dynamic',
+                        '@angular/core',
+                        '@angular/common',
+                        '@angular/forms',
+                        '@angular/http',
                         '@angular/router',
                         'rxjs'
                     ]
@@ -97,7 +99,13 @@ module.exports = function (options) {
             new AddAssetHtmlPlugin([
                 { filepath: helpers.pathFromRoot(`dll/${DllBundlesPlugin.resolveFile('polyfills')}`) },
                 { filepath: helpers.pathFromRoot(`dll/${DllBundlesPlugin.resolveFile('vendor')}`) }
-            ])
+            ]),
+            new LoaderOptionsPlugin({
+                debug: true,
+                options: {
+                    postcss: [autoprefixer]
+                }
+            })
         ],
         devServer: {
             port: METADATA.port,

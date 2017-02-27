@@ -6,7 +6,10 @@ const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 const ngcWebpack = require('ngc-webpack');
 
@@ -24,13 +27,14 @@ module.exports = function (options) {
     return {
         entry: {
             polyfills: './src/polyfills.ts',
+            vendor: './src/vendor.ts',
             main: AOT ? './src/main-aot.ts' : './src/main-jit.ts'
         },
         resolve: {
-            extensions: [ 
-                '.ts', 
-                '.js', 
-                '.json' 
+            extensions: [
+                '.ts',
+                '.js',
+                '.json'
             ],
             modules: [
                 helpers.pathFromRoot('src'),
@@ -42,7 +46,7 @@ module.exports = function (options) {
                 {
                     test: /\.tsx?$/,
                     use: [
-                        { 
+                        {
                             loader: 'ng-router-loader',
                             options: {
                                 loader: 'async-import',
@@ -68,20 +72,35 @@ module.exports = function (options) {
                 },
                 {
                     test: /\.css$/,
-                    use: [ 
-                        'to-string-loader', 
-                        'css-loader' 
-                    ],
+                    use: ['raw-loader'],
                     exclude: [ helpers.pathFromRoot('src', 'styles') ]
                 },
                 {
                     test: /\.scss$/,
                     use: [
-                        'to-string-loader',
-                        'css-loader',
+                        'raw-loader',
                         'sass-loader'
                     ],
                     exclude: [ helpers.pathFromRoot('src', 'styles') ]
+                },
+                {
+                    test: /initial\.scss$/,
+                    use: ExtractTextPlugin.extract({
+                        fallback: 'style-loader',
+                        use: 'css-loader!sass-loader?sourceMap'
+                    })
+                },
+                {
+                    test: /\.woff(2)?(\?v=.+)?$/,
+                    use: 'url-loader?limit=10000&mimetype=application/font-woff'
+                },
+                {
+                    test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
+                    use: 'file-loader'
+                },
+                {
+                    test: /bootstrap\/dist\/js\/umd\//,
+                    use: 'imports-loader?jQuery=jquery'
                 },
                 {
                     test: /\.html$/,
@@ -91,14 +110,14 @@ module.exports = function (options) {
                 {
                     test: /\.(jpg|png|gif)$/,
                     use: 'file-loader'
-                },
-                {
-                    test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
-                    use: 'file-loader'
                 }
             ]
         },
         plugins: [
+            new ExtractTextPlugin({
+                filename: 'initial.css',
+                allChunks: true
+            }),
             new TypedocWebpackPlugin(
                 {
                     out: helpers.pathFromRoot('docs'),
@@ -109,15 +128,15 @@ module.exports = function (options) {
             new CheckerPlugin(),
             new CommonsChunkPlugin({
                 name: 'polyfills',
-                chunks: [ 'polyfills' ]
+                chunks: ['polyfills']
             }),
             new CommonsChunkPlugin({
                 name: 'vendor',
-                chunks: [ 'main' ],
+                chunks: ['main'],
                 minChunks: module => /node_modules/.test(module.resource)
             }),
             new CommonsChunkPlugin({
-                name: [ 'polyfills', 'vendor' ].reverse()
+                name: ['polyfills', 'vendor'].reverse()
             }),
             new ContextReplacementPlugin(
                 // The (\\|\/) piece accounts for path separators in *nix and Windows
@@ -135,6 +154,25 @@ module.exports = function (options) {
                 title: METADATA.title,
                 chunksSortMode: 'dependency',
                 metadata: METADATA
+            }),
+            new LoaderOptionsPlugin({}),
+            new ProvidePlugin({
+                $: "jquery",
+                jQuery: "jquery",
+                "window.jQuery": "jquery",
+                Tether: "tether",
+                "window.Tether": "tether",
+                Tooltip: "exports-loader?Tooltip!bootstrap/js/dist/tooltip",
+                Alert: "exports-loader?Alert!bootstrap/js/dist/alert",
+                Button: "exports-loader?Button!bootstrap/js/dist/button",
+                Carousel: "exports-loader?Carousel!bootstrap/js/dist/carousel",
+                Collapse: "exports-loader?Collapse!bootstrap/js/dist/collapse",
+                Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown",
+                Modal: "exports-loader?Modal!bootstrap/js/dist/modal",
+                Popover: "exports-loader?Popover!bootstrap/js/dist/popover",
+                Scrollspy: "exports-loader?Scrollspy!bootstrap/js/dist/scrollspy",
+                Tab: "exports-loader?Tab!bootstrap/js/dist/tab",
+                Util: "exports-loader?Util!bootstrap/js/dist/util"
             }),
             new ngcWebpack.NgcWebpackPlugin({
                 disabled: !AOT,

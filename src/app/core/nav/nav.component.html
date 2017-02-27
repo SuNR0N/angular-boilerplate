@@ -1,7 +1,6 @@
 <header>
     <nav>
         <a *ngFor="let item of menuItems"
-            md-raised-button
             [routerLink]="item.link"
             routerLinkActive="router-link-active"
             href="">

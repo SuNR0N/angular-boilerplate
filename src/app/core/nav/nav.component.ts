@@ -13,7 +13,7 @@ export class NavComponent implements OnInit {
     ngOnInit() {
         this.menuItems = [
             new MenuItem('List', ['/books']),
-            new MenuItem('Create', ['/create']),
+            new MenuItem('Create', ['/books', 'new']),
             new MenuItem('Login', ['/login']),
             new MenuItem('Logout', ['/logout'])
         ];

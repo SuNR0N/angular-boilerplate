@@ -3,9 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { MaterialModule } from '@angular/material';
-import 'hammerjs';
-
 import { ExceptionService } from './exception.service';
 import { NavComponent } from './nav/nav.component';
 
@@ -13,8 +10,7 @@ import { NavComponent } from './nav/nav.component';
     imports: [
         CommonModule,
         FormsModule,
-        RouterModule,
-        MaterialModule
+        RouterModule
     ],
     exports: [
         CommonModule,

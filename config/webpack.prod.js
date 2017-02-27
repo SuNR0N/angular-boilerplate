@@ -1,3 +1,4 @@
+const autoprefixer = require('autoprefixer');
 const webpackMerge = require('webpack-merge');
 const helpers = require('./helpers');
 const cfg = require('./configuration');
@@ -5,6 +6,7 @@ const commonConfig = require('./webpack.common');
 
 // Webpack Plugins
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 
@@ -12,8 +14,8 @@ const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const ENV = process.env.ENV = process.env.NODE_ENV = cfg.Env.PRODUCTION;
 const HOST = process.env.HOST || cfg.Host.LOCALHOST;
 const PORT = process.env.PORT || cfg.Port.WEB_SERVER;
-const METADATA = webpackMerge(commonConfig({ 
-    env: ENV 
+const METADATA = webpackMerge(commonConfig({
+    env: ENV
 }).metadata, {
     host: HOST,
     port: PORT,
@@ -23,8 +25,8 @@ const METADATA = webpackMerge(commonConfig({
 
 // Webpack Configuration
 module.exports = function (options) {
-    return webpackMerge(commonConfig({ 
-        env: ENV 
+    return webpackMerge(commonConfig({
+        env: ENV
     }), {
         devtool: 'source-map',
         output: {
@@ -78,6 +80,13 @@ module.exports = function (options) {
                     if_return: true,
                     join_vars: true,
                     negate_iife: false // we need this for lazy v8
+                }
+            }),
+            new LoaderOptionsPlugin({
+                minimize: true,
+                debug: false,
+                options: {
+                    postcss: [autoprefixer]
                 }
             })
         ],

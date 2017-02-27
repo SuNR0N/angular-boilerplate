@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { BooksComponent } from './books.component';
+import { BookCreateComponent } from './book-create/book-create.component';
 import { BookListComponent } from './book-list/book-list.component';
 import { BookViewComponent } from './book-view/book-view.component';
 import { BookResolverService } from './shared/book-resolver.service';
@@ -17,7 +18,7 @@ const routes: Routes = [
             },
             {
                 path: 'new',
-                component: BookListComponent
+                component: BookCreateComponent
             },
             {
                 path: ':id',
@@ -39,6 +40,7 @@ export class BooksRoutingModule { }
 
 export const routedComponents = [
     BooksComponent,
+    BookCreateComponent,
     BookListComponent,
     BookViewComponent
 ];
