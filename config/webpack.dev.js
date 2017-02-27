@@ -1,7 +1,12 @@
 const webpackMerge = require('webpack-merge');
+const webpackMergeDll = webpackMerge.strategy({plugins: 'replace'});
 const helpers = require('./helpers');
 const cfg = require('./configuration');
 const commonConfig = require('./webpack.common');
+
+// Webpack Plugins
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const DllBundlesPlugin = require('webpack-dll-bundles-plugin').DllBundlesPlugin;
 
 // Webpack Constants
 const ENV = process.env.ENV = process.env.NODE_ENV = cfg.Env.DEVELOPMENT;
@@ -18,6 +23,7 @@ const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
 // Webpack Configuration
 module.exports = function (options) {
     return webpackMerge(commonConfig({ env: ENV }), {
+        devtool: 'cheap-module-source-map',
         output: {
             path: helpers.pathFromRoot('dist'),
             filename: '[name].bundle.js',
@@ -58,7 +64,40 @@ module.exports = function (options) {
             ]
         },
         plugins: [
-            // TODO
+            new DllBundlesPlugin({
+                bundles: {
+                    polyfills: [
+                        'core-js',
+                        {
+                            name: 'zone.js',
+                            path: 'zone.js/dist/zone.js'
+                        },
+                        {
+                            name: 'zone.js',
+                            path: 'zone.js/dist/long-stack-trace-zone.js'
+                        }
+                    ],
+                    vendor: [
+                        '@angular/common',
+                        '@angular/core',
+                        '@angular/forms',
+                        '@angular/http',
+                        '@angular/platform-browser',
+                        '@angular/platform-browser-dynamic',
+                        '@angular/router',
+                        'rxjs'
+                    ]
+                },
+                dllDir: helpers.pathFromRoot('dll'),
+                webpackConfig: webpackMergeDll(commonConfig({ env: ENV }), {
+                    devtool: 'cheap-module-source-map',
+                    plugins: []
+                })
+            }),
+            new AddAssetHtmlPlugin([
+                { filepath: helpers.pathFromRoot(`dll/${DllBundlesPlugin.resolveFile('polyfills')}`) },
+                { filepath: helpers.pathFromRoot(`dll/${DllBundlesPlugin.resolveFile('vendor')}`) }
+            ])
         ],
         devServer: {
             port: METADATA.port,
