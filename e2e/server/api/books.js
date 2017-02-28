@@ -35,7 +35,7 @@ function deleteBook (req, res) {
     let isbn = req.params.id;
 
     if (booksRepository.deleteOne(isbn)) {
-        res.status(HttpStatus.NO_CONTENT).json();
+        res.status(HttpStatus.NO_CONTENT).end();
     } else {
         res.status(HttpStatus.NOT_FOUND).json();
     }
@@ -49,14 +49,15 @@ function createBook (req, res) {
         res.status(HttpStatus.CONFLICT).json();
     } else {
         let newBook = booksRepository.save(book);
-        res.status(HttpStatus.CREATED).json(newBook);
+        res.setHeader('Location', req.protocol + '://' + req.get('host') + req.originalUrl + '/' + newBook.isbn);
+        res.status(HttpStatus.CREATED).end();
     }
 }
 
 function resetBooks (req, res) {
     booksRepository.reset();
 
-    res.status(HttpStatus.OK).json();
+    res.status(HttpStatus.OK).end();
 }
 
 module.exports = {

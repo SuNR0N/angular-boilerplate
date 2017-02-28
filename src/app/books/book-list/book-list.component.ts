@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { Book } from '../shared/book.model';
-import { BookService } from '../shared/book.service';
+import { BookService, BookRoutingService } from '../shared';
 
 @Component({
     selector: 'na-book-list',
@@ -14,13 +13,34 @@ export class BookListComponent implements OnInit {
 
     constructor(
         private bookService: BookService,
-        private router: Router) { }
+        private bookRoutingService: BookRoutingService) { }
 
     ngOnInit() {
         this.getBooks();
     }
 
-    getBooks() {
+    view(book: Book) {
+        this.bookRoutingService.gotoViewBook(book.isbn);
+    }
+
+    edit(book: Book) {
+        this.bookRoutingService.gotoEditBook(book.isbn);
+    }
+
+    delete(book: Book) {
+        this.bookService.deleteBook(book).subscribe(
+            (result) => {
+                let index = this.books.indexOf(book);
+                this.books.splice(index, 1);
+            },
+            (error) => {
+                console.log(`Failed to delete book with ISBN ${book.isbn}`);
+                console.log(error);
+            }
+        );
+    }
+
+    private getBooks() {
         this.books = [];
         this.bookService.getBooks().subscribe(
             (books) => {
@@ -34,9 +54,5 @@ export class BookListComponent implements OnInit {
                 console.log('List of books has been successfully retrieved');
             }
         );
-    }
-
-    onSelect(book: Book) {
-        this.router.navigate(['/books', book.isbn]);
     }
 }

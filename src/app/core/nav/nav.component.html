@@ -1,10 +1,17 @@
-<header>
-    <nav>
-        <a *ngFor="let item of menuItems"
-            [routerLink]="item.link"
-            routerLinkActive="router-link-active"
-            href="">
-            {{ item.caption }}
-        </a>
-    </nav>
-</header>
+<nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+    <a class="navbar-brand" href="#">Angular Boilerplate</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li *ngFor="let item of menuItems"
+                class="nav-item">
+                <a class="nav-link"
+                    [routerLink]="item.link"
+                    [routerLinkActiveOptions]="{exact:true}"
+                    routerLinkActive="active"
+                    href="">
+                    {{ item.caption }}
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

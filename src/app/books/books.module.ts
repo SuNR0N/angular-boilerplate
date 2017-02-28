@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { routedComponents, BooksRoutingModule } from './books-routing.module';
 
 import { SharedModule } from '../shared/shared.module';
-import { BookService } from './shared/book.service';
+import { BookService, BookRoutingService } from './shared';
 
 @NgModule({
     imports: [
@@ -11,6 +11,6 @@ import { BookService } from './shared/book.service';
         BooksRoutingModule
     ],
     declarations: [routedComponents],
-    providers: [BookService]
+    providers: [BookService, BookRoutingService]
 })
 export class BooksModule { }

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { Book } from '../shared/book.model';
-import { BookService } from '../shared/book.service';
+import { BookService, BookRoutingService } from '../shared';
 
 @Component({
     selector: 'na-book-view',
@@ -10,20 +10,36 @@ import { BookService } from '../shared/book.service';
     styleUrls: ['book-view.component.css']
 })
 export class BookViewComponent implements OnInit {
-    @Input() book: Book;
+    book: Book;
 
     private id: string;
 
     constructor(
         private route: ActivatedRoute,
-        private router: Router,
-        private bookService: BookService) { }
+        private bookService: BookService,
+        private bookRoutingService: BookRoutingService) { }
 
     ngOnInit() {
         this.route.data.subscribe(
             (data: { book: Book }) => {
                 this.book = data.book;
                 this.id = this.book.isbn;
+            }
+        );
+    }
+
+    edit() {
+        this.bookRoutingService.gotoEditBook(this.id);
+    }
+
+    delete() {
+        this.bookService.deleteBook(this.book).subscribe(
+            () => {
+                this.bookRoutingService.gotoBooks();
+            },
+            (error) => {
+                console.log(`Failed to delete book with ISBN ${this.book.isbn}`);
+                console.log(error);
             }
         );
     }

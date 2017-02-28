@@ -1,8 +1,31 @@
-<h2>Books</h2>
-
-<ul>
-    <li *ngFor="let book of books"
-        (click)="onSelect(book)">
-        <span>{{ book.title }}</span>
-    </li>
-</ul>
+<table class="table">
+    <thead>
+        <th>ISBN</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Publication Date</th>
+        <th>Action</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let book of books">
+            <td>{{ book.isbn }}</td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.publicationDate | date:'longDate' }}</td>
+            <td>
+                <button type="button"
+                        class="btn btn-secondary"
+                        (click)="view(book)">View
+                </button>
+                <button type="button"
+                        class="btn btn-primary"
+                        (click)="edit(book)">Edit
+                </button>
+                <button type="button"
+                        class="btn btn-danger"
+                        (click)="delete(book)">Delete
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

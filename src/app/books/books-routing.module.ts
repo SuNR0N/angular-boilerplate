@@ -5,6 +5,7 @@ import { BooksComponent } from './books.component';
 import { BookCreateComponent } from './book-create/book-create.component';
 import { BookListComponent } from './book-list/book-list.component';
 import { BookViewComponent } from './book-view/book-view.component';
+import { BookEditComponent } from './book-edit/book-edit.component';
 import { BookResolverService } from './shared/book-resolver.service';
 
 const routes: Routes = [
@@ -26,6 +27,13 @@ const routes: Routes = [
                 resolve: {
                     book: BookResolverService
                 }
+            },
+            {
+                path: ':id/edit',
+                component: BookEditComponent,
+                resolve: {
+                    book: BookResolverService
+                }
             }
         ]
     }
@@ -42,5 +50,6 @@ export const routedComponents = [
     BooksComponent,
     BookCreateComponent,
     BookListComponent,
-    BookViewComponent
+    BookViewComponent,
+    BookEditComponent
 ];
