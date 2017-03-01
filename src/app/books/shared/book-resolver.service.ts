@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
-import { Book } from './book.model';
-import { BookService } from './book.service';
+import { LoggerService } from '../../core';
+import { BookService, Book } from './';
 
 @Injectable()
 export class BookResolverService implements Resolve<Book> {
 
     constructor(
+        private loggerService: LoggerService,
         private bookService: BookService,
         private router: Router) { }
 
@@ -20,11 +21,11 @@ export class BookResolverService implements Resolve<Book> {
                     return book;
                 }
                 let msg = `Book with ISBN ${id} not found`;
-                console.log(msg);
+                this.loggerService.log(msg);
                 throw new Error(msg);
             })
             .catch((error: any) => {
-                console.log(`${error}. Navigating back to book list`);
+                this.loggerService.log(`${error}. Navigating back to book list`);
                 this.router.navigate(['/books']);
                 return Observable.of(null);
             });

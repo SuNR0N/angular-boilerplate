@@ -8,9 +8,9 @@
   "rules": {
     // Custom
     "trailing-comma": [
-      false, 
+      false,
       {
-        "multiline": "always", 
+        "multiline": "always",
         "singleline": "never"
       }
     ],
@@ -18,16 +18,16 @@
     // Angular
     "component-class-suffix": true,
     "component-selector": [
-      true, 
-      "element", 
-      "na", 
+      true,
+      "element",
+      "na",
       "kebab-case"
     ],
     "directive-class-suffix": true,
     "directive-selector": [
-      true, 
-      "attribute", 
-      "na", 
+      true,
+      "attribute",
+      "na",
       "camelCase"
     ],
     "import-destructuring-spacing": true,
@@ -38,8 +38,8 @@
     "no-input-rename": true,
     "no-output-rename": true,
     "pipe-naming": [
-      true, 
-      "camelCase", 
+      true,
+      "camelCase",
       "na"
     ],
     "templates-use-public": true,
@@ -51,8 +51,6 @@
     // General
     "no-console": [
       true,
-      "debug",
-      "info",
       "time",
       "timeEnd",
       "trace"

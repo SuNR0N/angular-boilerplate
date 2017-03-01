@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { Book } from './book.model';
+import { Book } from './';
 import { CONFIG, ExceptionService } from '../../core';
 
 const booksUrl = CONFIG.baseUrls.books;

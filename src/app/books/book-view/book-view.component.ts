@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Book } from '../shared/book.model';
-import { BookService, BookRoutingService } from '../shared';
+import { LoggerService } from '../../core';
+import { BookService, BookRoutingService, Book } from '../shared';
 
 @Component({
     selector: 'na-book-view',
@@ -15,6 +15,7 @@ export class BookViewComponent implements OnInit {
     private id: string;
 
     constructor(
+        private loggerService: LoggerService,
         private route: ActivatedRoute,
         private bookService: BookService,
         private bookRoutingService: BookRoutingService) { }
@@ -38,8 +39,8 @@ export class BookViewComponent implements OnInit {
                 this.bookRoutingService.gotoBooks();
             },
             (error) => {
-                console.log(`Failed to delete book with ISBN ${this.book.isbn}`);
-                console.log(error);
+                this.loggerService.log(`Failed to delete book with ISBN ${this.book.isbn}`);
+                this.loggerService.log(error);
             }
         );
     }

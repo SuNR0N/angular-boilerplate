@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { ExceptionService } from './exception.service';
+import { ExceptionService, LoggerService } from './';
 import { NavComponent } from './nav/nav.component';
 
 @NgModule({
@@ -19,6 +19,9 @@ import { NavComponent } from './nav/nav.component';
         NavComponent
     ],
     declarations: [NavComponent],
-    providers: [ExceptionService],
+    providers: [
+        ExceptionService,
+        LoggerService
+    ]
 })
 export class CoreModule { }

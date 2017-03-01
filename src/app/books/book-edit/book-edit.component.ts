@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
+import { LoggerService } from '../../core';
 import { BookService, BookRoutingService, Book } from '../shared';
 
 @Component({
@@ -20,6 +21,7 @@ export class BookEditComponent implements OnInit {
     private id: string;
 
     constructor(
+        private loggerService: LoggerService,
         private route: ActivatedRoute,
         private location: Location,
         private bookService: BookService,
@@ -45,8 +47,8 @@ export class BookEditComponent implements OnInit {
                 this.bookRoutingService.gotoViewBook(book.isbn);
             },
             (error) => {
-                console.log(`Failed to update book with ISBN ${this.book.isbn}`);
-                console.log(error);
+                this.loggerService.log(`Failed to update book with ISBN ${this.book.isbn}`);
+                this.loggerService.log(error);
             }
         );
     }

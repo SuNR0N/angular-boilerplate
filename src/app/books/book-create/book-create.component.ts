@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
+import { LoggerService } from '../../core';
 import { BookService, BookRoutingService, Book } from '../shared';
 
 @Component({
@@ -16,6 +17,7 @@ export class BookCreateComponent {
     newBookForm: FormGroup;
 
     constructor(
+        private loggerService: LoggerService,
         private bookService: BookService,
         private bookRoutingService: BookRoutingService) {
         this.createForm();
@@ -69,8 +71,8 @@ export class BookCreateComponent {
                 this.bookRoutingService.gotoViewBook(isbn);
             },
             (error) => {
-                console.log(`Failed to create book`);
-                console.log(error);
+                this.loggerService.log(`Failed to create book`);
+                this.loggerService.log(error);
             }
         );
     }

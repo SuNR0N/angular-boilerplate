@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-@Injectable()
 export class ExceptionService {
     catchErrorResponse: (errorResponse: any) => Observable<any> = (errorResponse: any) => {
         let response = <Response> errorResponse;

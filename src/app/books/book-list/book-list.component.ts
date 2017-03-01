@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Book } from '../shared/book.model';
-import { BookService, BookRoutingService } from '../shared';
+import { LoggerService } from '../../core';
+import { BookService, BookRoutingService, Book } from '../shared';
 
 @Component({
     selector: 'na-book-list',
@@ -12,6 +12,7 @@ export class BookListComponent implements OnInit {
     books: Book[];
 
     constructor(
+        private loggerService: LoggerService,
         private bookService: BookService,
         private bookRoutingService: BookRoutingService) { }
 
@@ -34,8 +35,8 @@ export class BookListComponent implements OnInit {
                 this.books.splice(index, 1);
             },
             (error) => {
-                console.log(`Failed to delete book with ISBN ${book.isbn}`);
-                console.log(error);
+                this.loggerService.log(`Failed to delete book with ISBN ${book.isbn}`);
+                this.loggerService.log(error);
             }
         );
     }
@@ -47,11 +48,8 @@ export class BookListComponent implements OnInit {
                 this.books = books;
             },
             (error) => {
-                console.log('Failed to retrieve books');
-                console.log(error);
-            },
-            () => {
-                console.log('List of books has been successfully retrieved');
+                this.loggerService.log('Failed to retrieve books');
+                this.loggerService.log(error);
             }
         );
     }

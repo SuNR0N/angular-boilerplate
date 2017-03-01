@@ -4,8 +4,4 @@ import { Component, OnInit } from '@angular/core';
     selector: 'na-app',
     templateUrl: 'app.component.html'
 })
-export class AppComponent implements OnInit {
-    ngOnInit() {
-        console.log('On AppComponent init...');
-    }
-}
+export class AppComponent { }
