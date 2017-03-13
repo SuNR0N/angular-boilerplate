@@ -2,16 +2,32 @@
     <a class="navbar-brand" href="#">Angular Boilerplate</a>
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
-            <li *ngFor="let item of menuItems"
+            <li *ngFor="let item of leftMenuItems"
                 class="nav-item">
                 <a class="nav-link"
-                    [routerLink]="item.link"
-                    [routerLinkActiveOptions]="{exact:true}"
-                    routerLinkActive="active"
-                    href="">
-                    {{ item.caption }}
+                   [class.disabled]="item.isDisabled()"
+                   [routerLink]="item.link"
+                   [routerLinkActiveOptions]="{exact:true}"
+                   routerLinkActive="active"
+                   href="">{{ item.caption }}
                 </a>
             </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li *ngFor="let item of rightMenuItems"
+                class="nav-item">
+                <a *ngIf="!item.link"
+                   class="nav-link"
+                   (click)="item.onClick($event)"
+                   href="">{{ item.caption }}
+                </a>
+                <a *ngIf="item.link"
+                   class="nav-link"
+                   href=""
+                   [routerLink]="item.link"
+                   [routerLinkActiveOptions]="{exact:true}"
+                   routerLinkActive="active">{{ item.caption }}
+                </a>
         </ul>
     </div>
 </nav>

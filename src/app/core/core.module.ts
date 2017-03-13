@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { ExceptionService, LoggerService } from './';
-import { NavComponent } from './nav/nav.component';
+import { AuthService, AuthGuard } from './auth';
+import { NavComponent } from './nav';
 
 @NgModule({
     imports: [
@@ -21,7 +22,9 @@ import { NavComponent } from './nav/nav.component';
     declarations: [NavComponent],
     providers: [
         ExceptionService,
-        LoggerService
+        LoggerService,
+        AuthService,
+        AuthGuard
     ]
 })
 export class CoreModule { }

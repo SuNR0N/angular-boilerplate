@@ -1,5 +1,5 @@
 const booksRepository = require('../repository/books-repository');
-const HttpStatus = require('./utils').HttpStatus;
+const HttpStatus = require('../utils/utils').HttpStatus;
 
 function getBook (req, res) {
     let isbn = req.params.id;

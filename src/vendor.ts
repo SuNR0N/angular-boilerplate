@@ -10,6 +10,7 @@ import '@angular/router';
 // RxJS
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
 
 // Web dependencies
 import 'jquery';

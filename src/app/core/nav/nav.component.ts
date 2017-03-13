@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { MenuItem } from './menu-item';
+import { AuthService } from '../auth/auth.service';
+import { IMenuItem } from './menu-item.model';
 
 @Component({
     selector: 'na-nav',
@@ -8,12 +10,46 @@ import { MenuItem } from './menu-item';
     styleUrls: ['nav.component.css']
 })
 export class NavComponent implements OnInit {
-    menuItems: MenuItem[];
+    leftMenuItems: IMenuItem[];
+    rightMenuItems: IMenuItem[];
+
+    private _leftMenuItems: IMenuItem[];
+    private _rightMenuItems: IMenuItem[];
+
+    constructor(
+        private router: Router,
+        private authService: AuthService) { }
 
     ngOnInit() {
-        this.menuItems = [
-            new MenuItem('All Books', ['/books']),
-            new MenuItem('Create Book', ['/books', 'new'])
+        this.leftMenuItems = this._leftMenuItems = [
+            {
+                caption: 'All Books',
+                link: ['/books'],
+                isDisabled: () => false
+            },
+            {
+                caption: 'Create Book',
+                link: ['/books', 'new'],
+                isDisabled: () => !this.authService.isLoggedInValue()
+            }
         ];
+        this._rightMenuItems = [
+            {
+                caption: 'Login',
+                link: ['/login'],
+                isVisible: () => !this.authService.isLoggedInValue()
+            },
+            {
+                caption: 'Logout',
+                link: null,
+                isVisible: () => this.authService.isLoggedInValue(),
+                onClick: () => this.authService.logout()
+            }
+        ];
+        this.authService.isLoggedIn().subscribe(this.onLoginStatusChange);
+    }
+
+    private onLoginStatusChange = (currentUser: any): void => {
+        this.rightMenuItems = this._rightMenuItems.filter((menuItem) => menuItem.isVisible());
     }
 }

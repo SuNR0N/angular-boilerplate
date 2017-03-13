@@ -7,6 +7,7 @@ import { BookListComponent } from './book-list/book-list.component';
 import { BookViewComponent } from './book-view/book-view.component';
 import { BookEditComponent } from './book-edit/book-edit.component';
 import { BookResolverService } from './shared/book-resolver.service';
+import { AuthGuard } from '../core/auth';
 
 const routes: Routes = [
     {
@@ -19,7 +20,8 @@ const routes: Routes = [
             },
             {
                 path: 'new',
-                component: BookCreateComponent
+                component: BookCreateComponent,
+                canActivate: [AuthGuard]
             },
             {
                 path: ':id',
@@ -31,6 +33,7 @@ const routes: Routes = [
             {
                 path: ':id/edit',
                 component: BookEditComponent,
+                canActivate: [AuthGuard],
                 resolve: {
                     book: BookResolverService
                 }

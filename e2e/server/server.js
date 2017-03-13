@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const helpers = require('../../config/helpers');
 
+const authApi = require('./api/authenticate');
 const booksApi = require('./api/books');
 
 module.exports = (PORT) => {
@@ -19,6 +20,10 @@ module.exports = (PORT) => {
 
     app.use('/', express.static(helpers.pathFromRoot('dist')));
 
+    // Authenticate
+    app.post(baseUrl + 'authenticate', authApi.authenticate);
+
+    // Books
     app.get(baseUrl + 'books', booksApi.getBooks);
     app.get(baseUrl + 'books/:id', booksApi.getBook);
     app.put(baseUrl + 'books/:id', booksApi.editBook);
