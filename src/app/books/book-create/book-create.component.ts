@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { LoggerService } from '../../core';
-import { BookService, BookRoutingService, Book } from '../shared';
+import { BookService, BookRoutingService, IBook } from '../shared';
 
 @Component({
     selector: 'na-book-create',
@@ -19,7 +19,8 @@ export class BookCreateComponent {
     constructor(
         private loggerService: LoggerService,
         private bookService: BookService,
-        private bookRoutingService: BookRoutingService) {
+        private bookRoutingService: BookRoutingService
+    ) {
         this.createForm();
     }
 
@@ -60,15 +61,15 @@ export class BookCreateComponent {
     }
 
     save() {
-        let book: Book = {
+        let book: IBook = {
             isbn: this.isbn.value,
             title: this.title.value,
             author: this.author.value,
             publicationDate: this.publicationDate.value
         };
         this.bookService.createBook(book).subscribe(
-            (isbn) => {
-                this.bookRoutingService.gotoViewBook(isbn);
+            (bookResource) => {
+                this.bookRoutingService.gotoViewBook(bookResource.content.isbn);
             },
             (error) => {
                 this.loggerService.log(`Failed to create book`);

@@ -18,7 +18,8 @@ export class NavComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private authService: AuthService) { }
+        private authService: AuthService
+    ) { }
 
     ngOnInit() {
         this.leftMenuItems = this._leftMenuItems = [

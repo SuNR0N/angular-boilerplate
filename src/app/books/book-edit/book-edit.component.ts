@@ -4,7 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { LoggerService } from '../../core';
-import { BookService, BookRoutingService, Book } from '../shared';
+import { HATEOASService, HATEOASResource } from '../../core/hateoas';
+import { BookService, BookRoutingService, IBook, BookRelation } from '../shared';
 
 @Component({
     selector: 'na-book-edit',
@@ -16,11 +17,12 @@ export class BookEditComponent implements OnInit {
     author: FormControl;
     publicationDate: FormControl;
     editBookForm: FormGroup;
-    book: Book;
+    bookResource: HATEOASResource<IBook>;
 
     private id: string;
 
     constructor(
+        private hateoasService: HATEOASService,
         private loggerService: LoggerService,
         private route: ActivatedRoute,
         private location: Location,
@@ -30,9 +32,9 @@ export class BookEditComponent implements OnInit {
 
     ngOnInit() {
         this.route.data.subscribe(
-            (data: { book: Book }) => {
-                this.setEditBook(data.book);
-                this.id = this.book.isbn;
+            (data: { bookResource: HATEOASResource<IBook> }) => {
+                this.setEditBook(data.bookResource);
+                this.id = this.bookResource.content.isbn;
             }
         );
     }
@@ -42,15 +44,25 @@ export class BookEditComponent implements OnInit {
     }
 
     save() {
-        this.bookService.updateBook(this.book).subscribe(
-            (book) => {
-                this.bookRoutingService.gotoViewBook(book.isbn);
+        let book: IBook = {
+            author: this.author.value,
+            isbn: this.bookResource.content.isbn,
+            publicationDate: this.publicationDate.value,
+            title: this.title.value
+        };
+        this.bookService.performActionOnBook(this.bookResource, BookRelation.Edit, book).subscribe(
+            (bookResource: HATEOASResource<IBook>) => {
+                this.bookRoutingService.gotoViewBook(bookResource.content.isbn);
             },
             (error) => {
-                this.loggerService.log(`Failed to update book with ISBN ${this.book.isbn}`);
+                this.loggerService.log(`Failed to update book with ISBN ${this.bookResource.content.isbn}`);
                 this.loggerService.log(error);
             }
         );
+    }
+
+    saveable() {
+        return this.hateoasService.hasRelation(this.bookResource, BookRelation.Edit.name);
     }
 
     isTitleInvalid() {
@@ -73,12 +85,12 @@ export class BookEditComponent implements OnInit {
         return this.editBookForm.invalid;
     }
 
-    private setEditBook(book: Book) {
-        this.book = book;
+    private setEditBook(bookResource: HATEOASResource<IBook>) {
+        this.bookResource = bookResource;
 
-        this.title = new FormControl(this.book.title, Validators.required);
-        this.author = new FormControl(this.book.author, Validators.required);
-        this.publicationDate = new FormControl(this.book.publicationDate);
+        this.title = new FormControl(this.bookResource.content.title, Validators.required);
+        this.author = new FormControl(this.bookResource.content.author, Validators.required);
+        this.publicationDate = new FormControl(this.bookResource.content.publicationDate);
         this.editBookForm = new FormGroup({
             title: this.title,
             author: this.author,

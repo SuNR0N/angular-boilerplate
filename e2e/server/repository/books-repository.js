@@ -1,3 +1,5 @@
+const Logger = require('../utils/utils').Logger;
+
 const mockedData = [
     {
         isbn: '099134460X',
@@ -33,7 +35,7 @@ const mockedData = [
 let books = [];
 
 function reset () {
-    console.log('Resetting books...');
+    Logger.info('Resetting books...');
     books.length = 0;
     mockedData.forEach((item) => {
         let clonedBook = JSON.parse(JSON.stringify(item));
@@ -47,7 +49,7 @@ function findOne (key) {
     });
 
     if (!book) {
-        console.log(`Book cannot be found. Reason: No book exists with ISBN ${key}`);
+        Logger.error(`No book exists with ISBN ${key}`);
     }
 
     return book;
@@ -66,7 +68,7 @@ function deleteOne (key) {
         books.splice(index, 1);
         return true;
     } else {
-        console.log(`Book cannot be deleted. Reason: No book exists with ISBN ${key}`);
+        Logger.error(`No book exists with ISBN ${key}`);
         return false;
     }
 }
@@ -80,7 +82,7 @@ function save (entity) {
         existingBook.title = entity.title || existingBook.title;
         existingBook.author = entity.author || existingBook.author;
         existingBook.publicationDate = entity.publicationDate || existingBook.publicationDate;
-        console.log(`Book has been successfully modified with ISBN ${entity.isbn}`);
+        Logger.success(`Book has been successfully modified with ISBN ${entity.isbn}`);
         return existingBook;
     } else {
         let newBook = {
@@ -90,7 +92,7 @@ function save (entity) {
             publicationDate: entity.publicationDate
         };
         books.push(newBook);
-        console.log(`Book has been successfully created with ISBN ${entity.isbn}`);
+        Logger.success(`Book has been successfully created with ISBN ${entity.isbn}`);
         return newBook;
     }
 }

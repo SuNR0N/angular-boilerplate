@@ -2,7 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { LoggerService } from '../../core';
-import { BookService, BookRoutingService, Book } from '../shared';
+import { HATEOASResource, HATEOASService } from '../../core/hateoas';
+import { BookService, BookRoutingService, IBook, BookRelation } from '../shared';
 
 @Component({
     selector: 'na-book-view',
@@ -10,21 +11,23 @@ import { BookService, BookRoutingService, Book } from '../shared';
     styleUrls: ['book-view.component.css']
 })
 export class BookViewComponent implements OnInit {
-    book: Book;
+    bookResource: HATEOASResource<IBook>;
 
     private id: string;
 
     constructor(
+        private hateoasService: HATEOASService,
         private loggerService: LoggerService,
         private route: ActivatedRoute,
         private bookService: BookService,
-        private bookRoutingService: BookRoutingService) { }
+        private bookRoutingService: BookRoutingService
+    ) { }
 
     ngOnInit() {
         this.route.data.subscribe(
-            (data: { book: Book }) => {
-                this.book = data.book;
-                this.id = this.book.isbn;
+            (data: { bookResource: HATEOASResource<IBook> }) => {
+                this.bookResource = data.bookResource;
+                this.id = this.bookResource.content.isbn;
             }
         );
     }
@@ -33,15 +36,23 @@ export class BookViewComponent implements OnInit {
         this.bookRoutingService.gotoEditBook(this.id);
     }
 
+    editable() {
+        return this.hateoasService.hasRelation(this.bookResource, BookRelation.Edit.name);
+    }
+
     delete() {
-        this.bookService.deleteBook(this.book).subscribe(
+        this.bookService.performActionOnBook(this.bookResource, BookRelation.Delete).subscribe(
             () => {
                 this.bookRoutingService.gotoBooks();
             },
             (error) => {
-                this.loggerService.log(`Failed to delete book with ISBN ${this.book.isbn}`);
+                this.loggerService.log(`Failed to delete book with ISBN ${this.bookResource.content.isbn}`);
                 this.loggerService.log(error);
             }
         );
+    }
+
+    deletable() {
+        return this.hateoasService.hasRelation(this.bookResource, BookRelation.Delete.name);
     }
 }

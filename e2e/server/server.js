@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const endpoints = require('./endpoints');
 const helpers = require('../../config/helpers');
 
 const authApi = require('./api/authenticate');
@@ -12,7 +13,6 @@ module.exports = (PORT) => {
     }
 
     const app = express();
-    const baseUrl = '/api/';
 
     app.use(morgan('dev'));
     app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,15 +21,15 @@ module.exports = (PORT) => {
     app.use('/', express.static(helpers.pathFromRoot('dist')));
 
     // Authenticate
-    app.post(baseUrl + 'authenticate', authApi.authenticate);
+    app.post(endpoints.authenticate, authApi.authenticate);
 
     // Books
-    app.get(baseUrl + 'books', booksApi.getBooks);
-    app.get(baseUrl + 'books/:id', booksApi.getBook);
-    app.put(baseUrl + 'books/:id', booksApi.editBook);
-    app.post(baseUrl + 'books', booksApi.createBook);
-    app.delete(baseUrl + 'books/:id', booksApi.deleteBook);
-    app.post(baseUrl + 'books/reset-action', booksApi.resetBooks);
+    app.get(endpoints.booksCollection, booksApi.getBooks);
+    app.get(endpoints.bookResource, booksApi.getBook);
+    app.put(endpoints.bookResource, booksApi.editBook);
+    app.post(endpoints.booksCollection, booksApi.createBook);
+    app.delete(endpoints.bookResource, booksApi.deleteBook);
+    app.post(endpoints.booksReset, booksApi.resetBooks);
 
     app.listen(PORT, 'localhost', () => {
         console.log(`Backend server is running at http://localhost:${PORT}`);

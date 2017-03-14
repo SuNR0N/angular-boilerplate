@@ -3,22 +3,24 @@ import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@a
 import { Observable } from 'rxjs/Observable';
 
 import { LoggerService } from '../../core';
-import { BookService, Book } from './';
+import { HATEOASResource } from '../../core/hateoas';
+import { BookService, IBook } from './';
 
 @Injectable()
-export class BookResolverService implements Resolve<Book> {
+export class BookResolverService implements Resolve<HATEOASResource<IBook>> {
 
     constructor(
         private loggerService: LoggerService,
         private bookService: BookService,
-        private router: Router) { }
+        private router: Router
+    ) { }
 
     resolve (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         let id = route.params['id'];
         return this.bookService.getBook(id)
-            .map((book) => {
-                if (book) {
-                    return book;
+            .map((bookResource) => {
+                if (bookResource) {
+                    return bookResource;
                 }
                 let msg = `Book with ISBN ${id} not found`;
                 this.loggerService.log(msg);

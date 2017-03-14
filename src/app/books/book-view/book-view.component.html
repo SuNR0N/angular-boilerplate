@@ -1,5 +1,5 @@
 <h2>
-    {{ book.author }} - {{ book.title }}
+    {{ bookResource.content.author }} - {{ bookResource.content.title }}
     <span class="badge badge-default">View</span>
 </h2>
 
@@ -10,38 +10,40 @@
         <label class="col-2 col-form-label">ISBN</label>
         <div class="col-10">
             <p id="isbn-static"
-               class="form-control-static">{{ book.isbn }}</p>
+               class="form-control-static">{{ bookResource.content.isbn }}</p>
         </div>
     </div>
     <div class="from-group row">
         <label class="col-2 col-form-label">Title</label>
         <div class="col-10">
             <p id="title-static"
-               class="form-control-static">{{ book.title }}</p>
+               class="form-control-static">{{ bookResource.content.title }}</p>
         </div>
     </div>
     <div class="from-group row">
         <label class="col-2 col-form-label">Author</label>
         <div class="col-10">
             <p id="author-static"
-               class="form-control-static">{{ book.author }}</p>
+               class="form-control-static">{{ bookResource.content.author }}</p>
         </div>
     </div>
     <div class="from-group row">
         <label class="col-2 col-form-label">Publication Date</label>
         <div class="col-10">
             <p id="publicationDate-static"
-               class="form-control-static">{{ book.publicationDate | date:'longDate' }}</p>
+               class="form-control-static">{{ bookResource.content.publicationDate | date:'longDate' }}</p>
         </div>
     </div>
 
     <div class="fixed-bottom text-center">
         <button id="edit-button"
+                *ngIf="editable()"
                 type="button"
                 (click)="edit()"
                 class="btn btn-primary">Edit
         </button>
         <button id="save-button"
+                *ngIf="deletable()"
                 type="button"
                 (click)="delete()"
                 class="btn btn-danger">Delete

@@ -19,7 +19,8 @@ export class LoginComponent {
         private loggerService: LoggerService,
         private route: ActivatedRoute,
         private router: Router,
-        private authService: AuthService) {
+        private authService: AuthService
+    ) {
         this.createForm();
     }
 

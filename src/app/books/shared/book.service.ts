@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { Book } from './';
+import { IBook } from './book.model';
+import { HATEOASResource, HATEOASService, IHATEOASRelation } from '../../core/hateoas';
 import { CONFIG, ExceptionService } from '../../core';
 
 const booksUrl = CONFIG.baseUrls.books;
@@ -13,34 +14,34 @@ export class BookService {
 
     constructor(
         private http: Http,
-        private exceptionService: ExceptionService) {
+        private hateoasService: HATEOASService,
+        private exceptionService: ExceptionService
+    ) {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         this.options = new RequestOptions({ headers });
     }
 
-    createBook(book: Book) {
+    createBook(book: IBook) {
         let body = JSON.stringify(book);
 
-        return <Observable<string>> this.http
+        return <Observable<HATEOASResource<IBook>>> this.http
             .post(`${booksUrl}`, body, this.options)
-            .map((res: Response) => {
-                let resourceUrl: string = res.headers.get('Location');
-                let resourceId: string = resourceUrl.substr(resourceUrl.lastIndexOf('/') + 1);
-                return resourceId;
-            })
+            .map((res: Response) => res.json())
             .catch(this.exceptionService.catchErrorResponse);
     }
 
-    updateBook(book: Book) {
+    // Not used directly as it's Hypermedia-Driven now by the 'edit' relation on the book resource
+    updateBook(book: IBook) {
         let body = JSON.stringify(book);
 
-        return <Observable<Book>> this.http
+        return <Observable<IBook>> this.http
             .put(`${booksUrl}/${book.isbn}`, body, this.options)
             .map((res: Response) => res.json())
             .catch(this.exceptionService.catchErrorResponse);
     }
 
-    deleteBook(book: Book) {
+    // Not used directly as it's Hypermedia-Driven now by the 'delete' relation on the book resource
+    deleteBook(book: IBook) {
         return <Observable<boolean>> this.http
             .delete(`${booksUrl}/${book.isbn}`)
             .map((res: Response) => res.ok)
@@ -48,15 +49,21 @@ export class BookService {
     }
 
     getBooks() {
-        return <Observable<Book[]>> this.http
+        return <Observable<HATEOASResource<Array<HATEOASResource<IBook>>>>> this.http
             .get(`${booksUrl}`)
             .map((res: Response) => res.json())
             .catch(this.exceptionService.catchErrorResponse);
     }
 
     getBook(id: string) {
-        return <Observable<Book>> this.http
+        return <Observable<HATEOASResource<IBook>>> this.http
             .get(`${booksUrl}/${id}`)
+            .map((res: Response) => res.json())
+            .catch(this.exceptionService.catchErrorResponse);
+    }
+
+    performActionOnBook(bookResource: HATEOASResource<IBook>, relation: IHATEOASRelation, body?: any) {
+        return this.http.request(this.hateoasService.getLinkForRelation(bookResource, relation.name), { method: relation.method, body })
             .map((res: Response) => res.json())
             .catch(this.exceptionService.catchErrorResponse);
     }

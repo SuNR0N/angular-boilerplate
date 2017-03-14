@@ -8,20 +8,26 @@
     </thead>
     <tbody>
         <tr *ngFor="let book of books">
-            <td>{{ book.isbn }}</td>
-            <td>{{ book.title }}</td>
-            <td>{{ book.author }}</td>
-            <td>{{ book.publicationDate | date:'longDate' }}</td>
+            <td>{{ book.content.isbn }}</td>
+            <td>{{ book.content.title }}</td>
+            <td>{{ book.content.author }}</td>
+            <td>{{ book.content.publicationDate | date:'longDate' }}</td>
             <td>
-                <button type="button"
+                <button id="view-button"
+                        *ngIf="viewable(book)"
+                        type="button"
                         class="btn btn-secondary"
                         (click)="view(book)">View
                 </button>
-                <button type="button"
+                <button id="edit-button"
+                        *ngIf="editable(book)"
+                        type="button"
                         class="btn btn-primary"
                         (click)="edit(book)">Edit
                 </button>
-                <button type="button"
+                <button id="delete-button"
+                        *ngIf="deletable(book)"
+                        type="button"
                         class="btn btn-danger"
                         (click)="delete(book)">Delete
                 </button>

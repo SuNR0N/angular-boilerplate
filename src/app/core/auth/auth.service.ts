@@ -17,7 +17,8 @@ export class AuthService {
     constructor(
         private router: Router,
         private exceptionService: ExceptionService,
-        private http: Http) {
+        private http: Http
+    ) {
         this.isLoginSubject = new BehaviorSubject<boolean>(this.hasToken());
         let headers = new Headers({ 'Content-Type': 'application/json' });
         this.options = new RequestOptions({ headers });
