@@ -1,4 +1,4 @@
 export * from './hateoas-link.model';
-export * from './hateoas-relation.model';
+export * from './hateoas-page-resource.model';
 export * from './hateoas-resource.model';
-export * from './hateoas.service';
+export * from './serializable.model';

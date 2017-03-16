@@ -1,24 +1,33 @@
-import { RequestMethod } from '@angular/http';
-import { IHATEOASRelation } from '../../core/hateoas/hateoas-relation.model';
-
-export class BookRelation {
-    public static readonly Self: IHATEOASRelation = {
-        name: 'self',
-        method: RequestMethod.Get
-    };
-    public static readonly Edit: IHATEOASRelation = {
-        name: 'edit',
-        method: RequestMethod.Put
-    };
-    public static readonly Delete: IHATEOASRelation = {
-        name: 'delete',
-        method: RequestMethod.Delete
-    };
-}
+import { HATEOASResource } from '../../core/hateoas/hateoas-resource.model';
+import { ISerializable } from '../../core/hateoas/serializable.model';
 
 export interface IBook {
     isbn: string;
     title: string;
     author: string;
     publicationDate: string;
+}
+
+export class Book extends HATEOASResource implements IBook, ISerializable {
+    static Links = {
+        Delete: 'delete',
+        Edit: 'edit',
+        Self: 'self'
+    };
+
+    isbn: string;
+    title: string;
+    author: string;
+    publicationDate: string;
+
+    deserialize(json: any): this {
+        super.deserialize(json);
+
+        this.isbn = json.isbn;
+        this.title = json.title;
+        this.author = json.author;
+        this.publicationDate = json.publicationDate;
+
+        return this;
+    }
 }

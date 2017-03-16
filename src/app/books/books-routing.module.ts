@@ -27,7 +27,7 @@ const routes: Routes = [
                 path: ':id',
                 component: BookViewComponent,
                 resolve: {
-                    bookResource: BookResolverService
+                    book: BookResolverService
                 }
             },
             {
@@ -35,7 +35,7 @@ const routes: Routes = [
                 component: BookEditComponent,
                 canActivate: [AuthGuard],
                 resolve: {
-                    bookResource: BookResolverService
+                    book: BookResolverService
                 }
             }
         ]

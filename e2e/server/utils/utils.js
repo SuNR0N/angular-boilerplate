@@ -11,6 +11,13 @@ const HttpStatus = {
     CONFLICT: 409
 };
 
+const RequestMethod = {
+    DELETE: 'DELETE',
+    GET: 'GET',
+    POST: 'POST',
+    PUT: 'PUT'
+};
+
 const Logger = {
     warn: (message) => console.log(chalk.yellow('[WARN] ' + message)),
     error: (message) => console.log(chalk.red('[ERROR] ' + message)),
@@ -22,23 +29,24 @@ function HATEOAS() {
     function createLinks (request, resource, links, mapping) {
         const urlPrefix = getUrlPrefix(request);
 
-        return links.map(linkDescriptor => {
-            let link = {};
+        return links.reduce((result, value) => {
             let href;
+            let linkKey = value.rel;
 
             // Create fully qualified URL
-            href = linkDescriptor.href.startsWith('/') ? urlPrefix + linkDescriptor.href : linkDescriptor.href;
+            href = value.href.startsWith('/') ? urlPrefix + value.href : value.href;
 
             // Resolve placeholders in URL based on the provided mapping
             for (let [placeholder, resourceProperty] of Object.entries(mapping)) {
                 href = href.replace(new RegExp(`:${placeholder}`, 'g'), resource[resourceProperty]);
             }
 
-            link.rel = linkDescriptor.relation;
-            link.href = href;
-
-            return link;
-        });
+            result[linkKey] = {
+                href: href,
+                method: value.method
+            }
+            return result;
+        }, {});
     }
 
     function getUrlPrefix (request) {
@@ -60,17 +68,18 @@ function HATEOAS() {
         links,
         linkParametersMapping,
         request,
-        contentProperty = 'content',
-        linksProperty = 'links'
+        linksProperty = '_links'
     } = {}) {
+        let clonedContent = Object.assign({}, content);
 
-        let wrapper = {};
-        let mappedLinks = createLinks(request, content, links, linkParametersMapping);
+        if (clonedContent && clonedContent.hasOwnProperty(linksProperty)) {
+            throw new Error(`Resource already contains a property with name '${linksProperty}'`);
+        }
 
-        wrapper[contentProperty] = content;
-        wrapper[linksProperty] = mappedLinks;
+        let mappedLinks = createLinks(request, clonedContent, links, linkParametersMapping);
+        clonedContent[linksProperty] = mappedLinks;
 
-        return wrapper;
+        return clonedContent;
     }
 
     function wrapResources ({
@@ -78,8 +87,7 @@ function HATEOAS() {
         links,
         linkParametersMapping,
         request,
-        contentProperty = 'content',
-        linksProperty = 'links'
+        linksProperty = '_links'
     } = {}) {
         let result;
 
@@ -89,7 +97,6 @@ function HATEOAS() {
                 links,
                 linkParametersMapping,
                 request,
-                contentProperty,
                 linksProperty
             }));
         } else {
@@ -98,7 +105,6 @@ function HATEOAS() {
                 links,
                 linkParametersMapping,
                 request,
-                contentProperty,
                 linksProperty
             });
         }
@@ -108,22 +114,23 @@ function HATEOAS() {
 
     function wrapAsPageResource ({
         content,
-        links,
         request,
         pageSize,
         page,
+        collectionKey,
         currentPageProperty = 'currentPage',
         totalPagesProperty = 'totalPages',
         totalItemsProperty = 'totalItems',
         pageProperty = 'page',
         pageSizeProperty = 'size',
-        contentProperty = 'content',
-        linksProperty = 'links'
+        contentProperty = '_embedded',
+        linksProperty = '_links'
     } = {}) {
         const urlPrefix = getUrlPrefix(request);
         const originalUrl = urlPrefix + request.originalUrl;
         let wrapper = {};
-        let mappedLinks = [{
+        let embedded = {};
+        let links = [{
             rel: 'self',
             href: originalUrl
         }];
@@ -138,46 +145,54 @@ function HATEOAS() {
             currentPage = page + 1;
             offset = page * pageSize;
 
-            wrapper[contentProperty] = content.filter((value, index) => {
+            embedded[collectionKey] = content.filter((value, index) => {
                 return (index >= offset) && index < (offset + pageSize);
             });
 
             url = updateQueryStringParameter(originalUrl, pageSizeProperty, pageSize);
 
             if (firstPage < page) {
-                mappedLinks.push({
+                links.push({
                     rel: 'first',
                     href: updateQueryStringParameter(url, pageProperty, firstPage)
                 });
             }
             if (previousPage < page) {
-                mappedLinks.push({
-                    rel: 'previous',
+                links.push({
+                    rel: 'prev',
                     href: updateQueryStringParameter(url, pageProperty, previousPage)
                 });
             }
             if (nextPage > page) {
-                mappedLinks.push({
+                links.push({
                     rel: 'next',
                     href: updateQueryStringParameter(url, pageProperty, nextPage)
                 });
             }
             if (lastPage > page) {
-                mappedLinks.push({
+                links.push({
                     rel: 'last',
                     href: updateQueryStringParameter(url, pageProperty, lastPage)
                 });
             }
 
-            wrapper[linksProperty] = mappedLinks;
             wrapper[totalPagesProperty] = Math.ceil(content.length / pageSize);
             wrapper[currentPageProperty] = currentPage;
         }
         // otherwise return the whole dataset without pagination
         else {
-            wrapper[contentProperty] = content;
+            embedded[collectionKey] = content;
         }
 
+        wrapper[contentProperty] = embedded;
+        wrapper[linksProperty] = links.reduce((result, value) => {
+            let linkKey = value.rel;
+            result[linkKey] = {
+                href: value.href,
+                method: RequestMethod.GET
+            };
+            return result;
+        }, {});
         wrapper[totalItemsProperty] = content.length;
 
         return wrapper;
@@ -194,6 +209,7 @@ function HATEOAS() {
 
 module.exports = {
     HttpStatus,
+    RequestMethod,
     Logger,
     HATEOAS: new HATEOAS()
 };

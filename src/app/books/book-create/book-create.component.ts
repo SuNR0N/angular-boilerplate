@@ -68,8 +68,8 @@ export class BookCreateComponent {
             publicationDate: this.publicationDate.value
         };
         this.bookService.createBook(book).subscribe(
-            (bookResource) => {
-                this.bookRoutingService.gotoViewBook(bookResource.content.isbn);
+            (newBook) => {
+                this.bookRoutingService.gotoViewBook(newBook.isbn);
             },
             (error) => {
                 this.loggerService.log(`Failed to create book`);

@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { ExceptionService, LoggerService } from './';
 import { AuthService, AuthGuard } from './auth';
 import { NavComponent } from './nav';
-import { HATEOASService } from './hateoas';
 
 @NgModule({
     imports: [
@@ -25,8 +24,7 @@ import { HATEOASService } from './hateoas';
         ExceptionService,
         LoggerService,
         AuthService,
-        AuthGuard,
-        HATEOASService
+        AuthGuard
     ]
 })
 export class CoreModule { }

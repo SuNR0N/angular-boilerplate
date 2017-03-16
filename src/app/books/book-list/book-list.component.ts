@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { LoggerService } from '../../core';
-import { BookService, BookRoutingService, IBook, BookRelation } from '../shared';
-import { HATEOASResource, HATEOASService } from '../../core/hateoas';
+import { BookService, BookRoutingService, Book } from '../shared';
 
 @Component({
     selector: 'na-book-list',
@@ -10,10 +9,9 @@ import { HATEOASResource, HATEOASService } from '../../core/hateoas';
     styleUrls: ['book-list.component.css']
 })
 export class BookListComponent implements OnInit {
-    books: Array<HATEOASResource<IBook>>;
+    books: Book[];
 
     constructor(
-        private hateoasService: HATEOASService,
         private loggerService: LoggerService,
         private bookService: BookService,
         private bookRoutingService: BookRoutingService
@@ -23,49 +21,51 @@ export class BookListComponent implements OnInit {
         this.getBooks();
     }
 
-    view(bookResource: HATEOASResource<IBook>) {
-        this.bookRoutingService.gotoViewBook(bookResource.content.isbn);
+    view(book: Book) {
+        this.bookRoutingService.gotoViewBook(book.isbn);
     }
 
-    viewable(bookResource: HATEOASResource<IBook>) {
-        return this.hateoasService.hasRelation(bookResource, BookRelation.Self.name);
+    viewable(book: Book) {
+        return book.hasLinkWithRel(Book.Links.Self);
     }
 
-    edit(bookResource: HATEOASResource<IBook>) {
-        this.bookRoutingService.gotoEditBook(bookResource.content.isbn);
+    edit(book: Book) {
+        this.bookRoutingService.gotoEditBook(book.isbn);
     }
 
-    editable(bookResource: HATEOASResource<IBook>) {
-        return this.hateoasService.hasRelation(bookResource, BookRelation.Edit.name);
+    editable(book: Book) {
+        return book.hasLinkWithRel(Book.Links.Edit);
     }
 
-    delete(bookResource: HATEOASResource<IBook>) {
-        this.bookService.performActionOnBook(bookResource, BookRelation.Delete).subscribe(
-            (result) => {
-                let index = this.books.indexOf(bookResource);
-                this.books.splice(index, 1);
-            },
+    delete(book: Book) {
+        this.bookService.performActionOnBook(book, Book.Links.Delete).subscribe(
+            () => this.deleteBook(book),
             (error) => {
-                this.loggerService.log(`Failed to delete book with ISBN ${bookResource.content.isbn}`);
+                this.loggerService.log(`Failed to delete book with ISBN ${book.isbn}`);
                 this.loggerService.log(error);
             }
         );
     }
 
-    deletable(bookResource: HATEOASResource<IBook>) {
-        return this.hateoasService.hasRelation(bookResource, BookRelation.Delete.name);
+    deletable(book: Book) {
+        return book.hasLinkWithRel(Book.Links.Delete);
     }
 
     private getBooks() {
         this.books = [];
         this.bookService.getBooks().subscribe(
             (response) => {
-                this.books = response.content;
+                this.books = response.getCollection();
             },
             (error) => {
                 this.loggerService.log('Failed to retrieve books');
                 this.loggerService.log(error);
             }
         );
+    }
+
+    private deleteBook(book: Book) {
+        let index = this.books.indexOf(book);
+        this.books.splice(index, 1);
     }
 }

@@ -8,10 +8,10 @@
     </thead>
     <tbody>
         <tr *ngFor="let book of books">
-            <td>{{ book.content.isbn }}</td>
-            <td>{{ book.content.title }}</td>
-            <td>{{ book.content.author }}</td>
-            <td>{{ book.content.publicationDate | date:'longDate' }}</td>
+            <td>{{ book.isbn }}</td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.publicationDate | date:'longDate' }}</td>
             <td>
                 <button id="view-button"
                         *ngIf="viewable(book)"

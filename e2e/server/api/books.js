@@ -1,20 +1,24 @@
 const booksRepository = require('../repository/books-repository');
 const HttpStatus = require('../utils/utils').HttpStatus;
+const RequestMethod = require('../utils/utils').RequestMethod;
 const HATEOAS = require('../utils/utils').HATEOAS;
 const endpoints = require('../endpoints');
 
 const Links = {
-    SELF: {
-        relation: 'self',
-        href: endpoints.bookResource
+    Self: {
+        rel: 'self',
+        href: endpoints.bookResource,
+        method: RequestMethod.GET
     },
-    EDIT: {
-        relation: 'edit',
-        href: endpoints.bookResource
+    Edit: {
+        rel: 'edit',
+        href: endpoints.bookResource,
+        method: RequestMethod.PUT
     },
-    DELETE: {
-        relation: 'delete',
-        href: endpoints.bookResource
+    Delete: {
+        rel: 'delete',
+        href: endpoints.bookResource,
+        method: RequestMethod.DELETE
     }
 };
 
@@ -24,9 +28,9 @@ function getBook (req, res) {
     let hateoasBookResponse = HATEOAS.wrapResource({
         content: book,
         links: [
-            Links.SELF,
-            Links.EDIT,
-            Links.DELETE
+            Links.Self,
+            Links.Edit,
+            Links.Delete
         ],
         linkParametersMapping: { id: 'isbn' },
         request: req
@@ -47,13 +51,14 @@ function getBooks (req, res) {
         content: HATEOAS.wrapResources({
             content: books,
             links: [
-                Links.SELF,
-                Links.EDIT,
-                Links.DELETE
+                Links.Self,
+                Links.Edit,
+                Links.Delete
             ],
             linkParametersMapping: { id: 'isbn' },
             request: req
         }),
+        collectionKey: 'books',
         page: page,
         pageSize: pageSize,
         request: req
@@ -72,9 +77,9 @@ function editBook (req, res) {
         let hateoasBookResponse = HATEOAS.wrapResource({
             content: modifiedBook,
             links: [
-                Links.SELF,
-                Links.EDIT,
-                Links.DELETE
+                Links.Self,
+                Links.Edit,
+                Links.Delete
             ],
             linkParametersMapping: { id: 'isbn' },
             request: req
@@ -106,9 +111,9 @@ function createBook (req, res) {
         let hateoasBookResponse = HATEOAS.wrapResource({
             content: newBook,
             links: [
-                Links.SELF,
-                Links.EDIT,
-                Links.DELETE
+                Links.Self,
+                Links.Edit,
+                Links.Delete
             ],
             linkParametersMapping: { id: 'isbn' },
             request: req
