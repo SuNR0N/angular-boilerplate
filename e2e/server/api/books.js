@@ -3,6 +3,7 @@ const HttpStatus = require('../utils/utils').HttpStatus;
 const RequestMethod = require('../utils/utils').RequestMethod;
 const HATEOAS = require('../utils/utils').HATEOAS;
 const endpoints = require('../endpoints');
+const state = require('../state');
 
 const Links = {
     Self: {
@@ -13,12 +14,14 @@ const Links = {
     Edit: {
         rel: 'edit',
         href: endpoints.bookResource,
-        method: RequestMethod.PUT
+        method: RequestMethod.PUT,
+        isApplicable: () => state.hasCurrentUser()
     },
     Delete: {
         rel: 'delete',
         href: endpoints.bookResource,
-        method: RequestMethod.DELETE
+        method: RequestMethod.DELETE,
+        isApplicable: () => state.hasCurrentUser()
     }
 };
 

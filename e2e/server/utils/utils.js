@@ -1,4 +1,5 @@
 const chalk = require('chalk');
+const jwt = require('jsonwebtoken');
 
 const HttpStatus = {
     OK: 200,
@@ -25,11 +26,65 @@ const Logger = {
     success: (message) => console.log(chalk.green('[SUCCESS] ' + message))
 }
 
+function JWT() {
+    const defaultIssuer = 'localhost';
+    const defaultSecret = 'SHHH_SECRET';
+    const defualtExpiration = 900;
+    const defaultHeaderFieldName = 'Authorization';
+    const defaultPrefix = 'Bearer ';
+
+    let header = defaultHeaderFieldName;
+
+    function addToken({
+        response,
+        subject,
+        issuer = defaultIssuer,
+        secret = defaultSecret,
+        expiresInSeconds = defualtExpiration,
+        headerFieldName = defaultHeaderFieldName,
+        prefix = defaultPrefix
+    } = {}) {
+        let token = jwt.sign({}, secret, {
+            subject,
+            issuer,
+            expiresIn: expiresInSeconds
+        });
+
+        response.set({
+            [headerFieldName]: prefix + token
+        });
+
+        header = headerFieldName;
+    }
+
+    function getHeader() {
+        return header;
+    }
+
+    function hasHeader(request) {
+        return request.get(header);
+    }
+
+    const publicAPI = {
+        addToken,
+        getHeader,
+        hasHeader
+    }
+
+    return publicAPI;
+}
+
 function HATEOAS() {
+    function filterLinks (links) {
+        return links.filter((link) => {
+            return (typeof link.isApplicable === 'function') ? link.isApplicable() : true;
+        });
+    }
+
     function createLinks (request, resource, links, mapping) {
         const urlPrefix = getUrlPrefix(request);
 
-        return links.reduce((result, value) => {
+        return filterLinks(links).reduce((result, value) => {
             let href;
             let linkKey = value.rel;
 
@@ -211,5 +266,6 @@ module.exports = {
     HttpStatus,
     RequestMethod,
     Logger,
-    HATEOAS: new HATEOAS()
+    HATEOAS: new HATEOAS(),
+    JWT: new JWT()
 };

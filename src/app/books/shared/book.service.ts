@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
+import { Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+
+import { AuthHttp } from 'angular2-jwt';
 
 import { IBook, Book } from './book.model';
 import { IHATEOASLink } from '../../core/hateoas/hateoas-link.model';
@@ -14,7 +16,7 @@ export class BookService {
     private options: RequestOptions;
 
     constructor(
-        private http: Http,
+        private http: AuthHttp,
         private exceptionService: ExceptionService
     ) {
         let headers = new Headers({ 'Content-Type': 'application/json' });

@@ -3,7 +3,8 @@ export const CONFIG = {
         books: '/api/books',
         authenticate: '/api/authenticate'
     },
-    localStorage: {
-        profile: 'profile'
+    auth: {
+        profile: 'profile',
+        tokenName: 'id_token'
     }
 };

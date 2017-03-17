@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions, Headers, Response } from '@angular/http';
+import { RequestOptions, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { AuthHttp, tokenNotExpired } from 'angular2-jwt';
 
 import { CONFIG } from '../config';
 import { ExceptionService } from '../exception.service';
 import { IUser } from './user.model';
 import { ICredential } from '../../login/credential.model';
+
+const headerName = 'Authorization';
+const headerPrefix = 'Bearer ';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +21,7 @@ export class AuthService {
     constructor(
         private router: Router,
         private exceptionService: ExceptionService,
-        private http: Http
+        private http: AuthHttp
     ) {
         this.isLoginSubject = new BehaviorSubject<boolean>(this.hasToken());
         let headers = new Headers({ 'Content-Type': 'application/json' });
@@ -28,8 +32,10 @@ export class AuthService {
         return <Observable<IUser>> this.http
             .post(`${CONFIG.baseUrls.authenticate}`, credential, this.options)
             .map((res: Response) => {
+                let token = this.getToken(res.headers);
                 let user: IUser = res.json();
-                localStorage.setItem(CONFIG.localStorage.profile, JSON.stringify(user));
+                localStorage.setItem(CONFIG.auth.tokenName, token);
+                localStorage.setItem(CONFIG.auth.profile, JSON.stringify(user));
                 this.isLoginSubject.next(true);
                 return user;
             })
@@ -37,7 +43,8 @@ export class AuthService {
     }
 
     logout() {
-        localStorage.removeItem(CONFIG.localStorage.profile);
+        localStorage.removeItem(CONFIG.auth.tokenName);
+        localStorage.removeItem(CONFIG.auth.profile);
         this.isLoginSubject.next(false);
         this.router.navigate(['/login']);
     }
@@ -51,6 +58,18 @@ export class AuthService {
     }
 
     private hasToken() {
-        return !!localStorage.getItem(CONFIG.localStorage.profile);
+        return tokenNotExpired();
+    }
+
+    private getToken(headers: Headers): string {
+        let headerValue = headers.get(headerName);
+        let regExp = new RegExp('^' + headerPrefix + '(.*)$');
+        let tokenArr = regExp.exec(headerValue);
+
+        if (tokenArr) {
+            return tokenArr[1];
+        } else {
+            return null;
+        }
     }
 }

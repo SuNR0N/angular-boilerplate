@@ -1,8 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+
 const endpoints = require('./endpoints');
+const state = require('./state');
 const helpers = require('../../config/helpers');
+const JWT = require('./utils/utils').JWT;
 
 const authApi = require('./api/authenticate');
 const booksApi = require('./api/books');
@@ -17,6 +20,26 @@ module.exports = (PORT) => {
     app.use(morgan('dev'));
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
+
+    // Intercept HTTP requests to handle JWT tokens
+    app.use((req, res, next) => {
+        /*
+         *  If there is a logged in user and the request contains the predefined HTTP header
+         *  which contains the JWT token then add the JWT token to the response headers
+         */
+        if (state.hasCurrentUser() && JWT.hasHeader(req)) {
+            JWT.addToken({
+                response: res,
+                subject: state.getCurrentUser().username,
+                headerFieldName: JWT.getHeader()
+            });
+        }
+        // otherwise reset current user
+        else {
+            state.setCurrentUser(null);
+        }
+        next();
+    });
 
     app.use('/', express.static(helpers.pathFromRoot('dist')));
 
