@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { LoggerService } from '../../core';
-import { BookService, BookRoutingService, IBook } from '../shared';
+import { BookService, BookRoutingService, IBook, ISBNValidator } from '../shared';
 
 @Component({
     selector: 'na-book-create',
@@ -33,7 +33,7 @@ export class BookCreateComponent {
     }
 
     isISBNFormatInvalid() {
-        return !this.isFieldValid(this.isbn) && this.hasPatternMismatchOnField(this.isbn);
+        return !this.isFieldValid(this.isbn) && this.hasInvalidISBN(this.isbn);
     }
 
     isTitleInvalid() {
@@ -79,7 +79,7 @@ export class BookCreateComponent {
     }
 
     private createForm() {
-        this.isbn = new FormControl('', Validators.required);
+        this.isbn = new FormControl('', [Validators.required, ISBNValidator.checkISBN]);
         this.title = new FormControl('', Validators.required);
         this.author = new FormControl('', Validators.required);
         this.publicationDate = new FormControl('');
@@ -99,7 +99,7 @@ export class BookCreateComponent {
         return field.errors && field.errors.hasOwnProperty('required');
     }
 
-    private hasPatternMismatchOnField(field: FormControl): boolean {
-        return field.errors && field.errors.hasOwnProperty('pattern');
+    private hasInvalidISBN(field: FormControl): boolean {
+        return field.errors && field.errors.hasOwnProperty('isbn');
     }
 }
