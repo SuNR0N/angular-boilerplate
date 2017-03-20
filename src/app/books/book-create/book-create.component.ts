@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { LoggerService } from '../../core';
+import { LoggerService, ToasterService } from '../../core';
 import { BookService, BookRoutingService, IBook, ISBNValidator } from '../shared';
 
 @Component({
@@ -17,6 +17,7 @@ export class BookCreateComponent {
     newBookForm: FormGroup;
 
     constructor(
+        private toasterService: ToasterService,
         private loggerService: LoggerService,
         private bookService: BookService,
         private bookRoutingService: BookRoutingService
@@ -69,10 +70,11 @@ export class BookCreateComponent {
         };
         this.bookService.createBook(book).subscribe(
             (newBook) => {
+                this.toasterService.success(`${newBook.title} (${newBook.isbn}) has been successfully created`, 'Successful Creation');
                 this.bookRoutingService.gotoViewBook(newBook.isbn);
             },
             (error) => {
-                this.loggerService.log(`Failed to create book`);
+                this.toasterService.error(`Failed to create book`, 'Creation Failed');
                 this.loggerService.log(error);
             }
         );

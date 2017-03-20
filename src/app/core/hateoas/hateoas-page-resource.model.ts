@@ -32,7 +32,7 @@ export class HATEOASPageResource<T extends ISerializable> extends HATEOASResourc
     deserialize(json: any): this {
         super.deserialize(json);
 
-        this._embedded = new Map();
+        this._embedded = new Map<string, T[]>();
         if (json && json.hasOwnProperty('_embedded')) {
             for (let key in json._embedded) {
                 if (json._embedded.hasOwnProperty(key)) {

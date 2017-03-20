@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { LoggerService } from '../../core';
+import { LoggerService, ToasterService } from '../../core';
 import { BookService, BookRoutingService, Book } from '../shared';
 
 @Component({
@@ -12,6 +12,7 @@ export class BookListComponent implements OnInit {
     books: Book[];
 
     constructor(
+        private toasterService: ToasterService,
         private loggerService: LoggerService,
         private bookService: BookService,
         private bookRoutingService: BookRoutingService
@@ -39,9 +40,12 @@ export class BookListComponent implements OnInit {
 
     delete(book: Book) {
         this.bookService.performActionOnBook(book, Book.Links.Delete).subscribe(
-            () => this.deleteBook(book),
+            () => {
+                this.toasterService.success(`${book.title} (${book.isbn}) has been successfully deleted`, 'Successful Deletion');
+                this.deleteBook(book);
+            },
             (error) => {
-                this.loggerService.log(`Failed to delete book with ISBN ${book.isbn}`);
+                this.toasterService.error(`Failed to delete book with ISBN ${book.isbn}`, 'Deletion Failed');
                 this.loggerService.log(error);
             }
         );
@@ -58,7 +62,7 @@ export class BookListComponent implements OnInit {
                 this.books = response.getCollection();
             },
             (error) => {
-                this.loggerService.log('Failed to retrieve books');
+                this.toasterService.error('Failed to retrieve books', 'Load Failed');
                 this.loggerService.log(error);
             }
         );

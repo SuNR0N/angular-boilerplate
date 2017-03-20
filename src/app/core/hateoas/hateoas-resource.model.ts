@@ -13,7 +13,7 @@ export class HATEOASResource implements IHATEOASResource, ISerializable {
     _links: Map<string, IHATEOASLink>;
 
     deserialize(json: any): this {
-        this._links = new Map();
+        this._links = new Map<string, IHATEOASLink>();
         if (json && json.hasOwnProperty('_links')) {
             for (let rel in json._links) {
                 if (json._links.hasOwnProperty(rel)) {

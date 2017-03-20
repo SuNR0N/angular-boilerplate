@@ -5,8 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { AuthHttp, tokenNotExpired } from 'angular2-jwt';
 
-import { CONFIG } from '../config';
-import { ExceptionService } from '../exception.service';
+import { CONFIG, ExceptionService } from '../';
 import { IUser } from './user.model';
 import { ICredential } from '../../login/credential.model';
 

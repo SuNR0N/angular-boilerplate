@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { LoggerService } from '../../core';
+import { LoggerService, ToasterService } from '../../core';
 import { BookService, BookRoutingService, IBook, Book } from '../shared';
 
 @Component({
@@ -21,6 +21,7 @@ export class BookEditComponent implements OnInit {
     private id: string;
 
     constructor(
+        private toasterService: ToasterService,
         private loggerService: LoggerService,
         private route: ActivatedRoute,
         private location: Location,
@@ -50,10 +51,11 @@ export class BookEditComponent implements OnInit {
         };
         this.bookService.performActionOnBook(this.book, Book.Links.Edit, book).subscribe(
             (persistedBook: Book) => {
+                this.toasterService.success(`${this.book.title} (${this.book.isbn}) has been successfully updated`, 'Successful Update');
                 this.bookRoutingService.gotoViewBook(persistedBook.isbn);
             },
             (error) => {
-                this.loggerService.log(`Failed to update book with ISBN ${this.book.isbn}`);
+                this.toasterService.error(`Failed to update book with ISBN ${this.book.isbn}`, 'Update Failed');
                 this.loggerService.log(error);
             }
         );

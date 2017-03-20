@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { LoggerService } from '../core/logger.service';
+import { LoggerService, ToasterService } from '../core';
 import { AuthService } from '../core/auth/auth.service';
 import { ICredential } from './credential.model';
 
@@ -16,6 +16,7 @@ export class LoginComponent {
     loginForm: FormGroup;
 
     constructor(
+        private toasterService: ToasterService,
         private loggerService: LoggerService,
         private route: ActivatedRoute,
         private router: Router,
@@ -31,10 +32,11 @@ export class LoginComponent {
         };
         this.authService.login(credential).subscribe(
             (user) => {
+                this.toasterService.success(`Welcome back ${user.firstName} ${user.lastName}`, 'Successful Login');
                 this.router.navigate(['/books']);
             },
             (error) => {
-                this.loggerService.log(`Failed to login`);
+                this.toasterService.error(`Invalid credentials`, 'Login Failed');
                 this.loggerService.log(error);
             }
         );

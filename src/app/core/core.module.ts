@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { ExceptionService, LoggerService } from './';
+import { ToasterService, ExceptionService, LoggerService } from './';
 import { AuthService, AuthGuard } from './auth';
 import { NavComponent } from './nav';
 
@@ -24,7 +24,8 @@ import { NavComponent } from './nav';
         ExceptionService,
         LoggerService,
         AuthService,
-        AuthGuard
+        AuthGuard,
+        ToasterService
     ]
 })
 export class CoreModule { }

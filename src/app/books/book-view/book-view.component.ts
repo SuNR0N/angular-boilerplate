@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { LoggerService } from '../../core';
+import { LoggerService, ToasterService } from '../../core';
 import { BookService, BookRoutingService, Book } from '../shared';
 
 @Component({
@@ -15,6 +15,7 @@ export class BookViewComponent implements OnInit {
     private id: string;
 
     constructor(
+        private toasterService: ToasterService,
         private loggerService: LoggerService,
         private route: ActivatedRoute,
         private bookService: BookService,
@@ -40,9 +41,12 @@ export class BookViewComponent implements OnInit {
 
     delete() {
         this.bookService.performActionOnBook(this.book, Book.Links.Delete).subscribe(
-            () => this.bookRoutingService.gotoBooks(),
+            () => {
+                this.toasterService.success(`${this.book.title} (${this.book.isbn}) has been successfully deleted`, 'Successful Deletion');
+                this.bookRoutingService.gotoBooks();
+            },
             (error) => {
-                this.loggerService.log(`Failed to delete book with ISBN ${this.book.isbn}`);
+                this.toasterService.error(`Failed to delete book with ISBN ${this.book.isbn}`, 'Deletion Failed');
                 this.loggerService.log(error);
             }
         );
