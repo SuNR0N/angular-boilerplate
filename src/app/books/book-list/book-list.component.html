@@ -17,19 +17,25 @@
                         *ngIf="viewable(book)"
                         type="button"
                         class="btn btn-secondary"
-                        (click)="view(book)">View
+                        (click)="view(book)">
+                        <i class="fa fa-eye"
+                        aria-hidden="true"></i> View
                 </button>
                 <button id="edit-button"
                         *ngIf="editable(book)"
                         type="button"
                         class="btn btn-primary"
-                        (click)="edit(book)">Edit
+                        (click)="edit(book)">
+                        <i class="fa fa-pencil"
+                        aria-hidden="true"></i> Edit
                 </button>
                 <button id="delete-button"
                         *ngIf="deletable(book)"
                         type="button"
                         class="btn btn-danger"
-                        (click)="delete(book)">Delete
+                        (click)="delete(book)">
+                        <i class="fa fa-trash"
+                        aria-hidden="true"></i> Delete
                 </button>
             </td>
         </tr>

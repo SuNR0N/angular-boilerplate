@@ -18,3 +18,4 @@ import 'rxjs/add/observable/throw';
 // Web dependencies
 import 'jquery';
 import 'bootstrap-loader';
+import 'font-awesome-sass-loader!../config/font-awesome.config.js';

@@ -9,7 +9,11 @@
                    [routerLink]="item.link"
                    [routerLinkActiveOptions]="{exact:true}"
                    routerLinkActive="active"
-                   href="">{{ item.caption }}
+                   href="">
+                   <i class="fa"
+                      *ngIf="item.class"
+                      [ngClass]="item.class"
+                      aria-hidden="true"></i> {{ item.caption }}
                 </a>
             </li>
         </ul>
@@ -19,14 +23,22 @@
                 <a *ngIf="!item.link"
                    class="nav-link"
                    (click)="item.onClick($event)"
-                   href="">{{ item.caption }}
+                   href="">
+                   <i class="fa"
+                      *ngIf="item.class"
+                      [ngClass]="item.class"
+                      aria-hidden="true"></i> {{ item.caption }}
                 </a>
                 <a *ngIf="item.link"
                    class="nav-link"
                    href=""
                    [routerLink]="item.link"
                    [routerLinkActiveOptions]="{exact:true}"
-                   routerLinkActive="active">{{ item.caption }}
+                   routerLinkActive="active">
+                   <i class="fa"
+                      *ngIf="item.class"
+                      [ngClass]="item.class"
+                      aria-hidden="true"></i> {{ item.caption }}
                 </a>
         </ul>
     </div>

@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { ToasterService, ExceptionService, LoggerService } from './';
 import { AuthService, AuthGuard } from './auth';
 import { NavComponent } from './nav';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { PageForbiddenComponent } from './page-forbidden/page-forbidden.component';
 
 @NgModule({
     imports: [
@@ -19,7 +21,11 @@ import { NavComponent } from './nav';
         RouterModule,
         NavComponent
     ],
-    declarations: [NavComponent],
+    declarations: [
+        NavComponent,
+        PageNotFoundComponent,
+        PageForbiddenComponent
+    ],
     providers: [
         ExceptionService,
         LoggerService,

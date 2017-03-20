@@ -40,7 +40,13 @@ Login Credentials:
 - [ ] Implement unit tests
 - [ ] Implement e2e tests
 - [ ] Add proper styling using SASS
-- [ ] Integrate font-awesome
-- [ ] Investigate badge issue for Bootstrap 4
-- [ ] Implement ToasterService
-- [ ] Implement 404 and Unauthorized pages
+- [X] Integrate font-awesome
+- [X] Investigate badge issue for Bootstrap 4
+- [X] Implement ToasterService
+- [X] Implement 404 and Unauthorized pages
+- [ ] Use enableProdMode in production
+- [ ] Add HMR for Express
+- [ ] Implement modal and canDeactivate guard when leaving Edit/Create page
+- [ ] Add support for data reset
+- [ ] Implement Pager component for List page
+- [ ] Implement filtering for List page

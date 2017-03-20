@@ -2,6 +2,10 @@
     width: 330px;
     padding: 15px;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
 }
 
 .form-login h2 {

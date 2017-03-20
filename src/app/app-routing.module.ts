@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, Routes, RouterModule } from '@angular/router';
 
+import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
+import { PageForbiddenComponent } from './core/page-forbidden/page-forbidden.component';
+
 const routes: Routes = [
     {
         path: '',
@@ -14,6 +17,16 @@ const routes: Routes = [
     {
         path: 'books',
         loadChildren: 'app/books/books.module#BooksModule'
+    },
+    {
+        path: '403',
+        pathMatch: 'full',
+        component: PageForbiddenComponent
+    },
+    {
+        path: '**',
+        pathMatch: 'full',
+        component: PageNotFoundComponent
     }
 ];
 

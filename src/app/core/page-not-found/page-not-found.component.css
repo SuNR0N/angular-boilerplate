@@ -1,0 +1,35 @@
+article {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: slide-in 2s ease;
+}
+
+article .fa {
+    font-size: 5rem;
+    animation:
+        swing 2s ease-in-out 2s infinite;
+}
+
+@keyframes slide-in {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+  }
+}
+
+@keyframes swing {
+    0% {
+        transform: rotate(-20deg);
+    }
+    50% {
+        transform: rotate(20deg);
+    }
+    100% {
+        transform: rotate(-20deg);
+    }
+}

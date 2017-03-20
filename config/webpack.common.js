@@ -91,12 +91,12 @@ module.exports = function (options) {
                     })
                 },
                 {
-                    test: /\.woff(2)?(\?v=.+)?$/,
-                    use: 'url-loader?limit=10000&mimetype=application/font-woff'
+                    test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                    loader: 'url-loader?limit=10000&mimetype=application/font-woff'
                 },
                 {
-                    test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
-                    use: 'file-loader'
+                    test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                    loader: 'file-loader'
                 },
                 {
                     test: /bootstrap\/dist\/js\/umd\//,
