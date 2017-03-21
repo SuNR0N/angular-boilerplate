@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../auth/auth.service';
+import { ResetService } from '../reset/reset.service';
 import { IMenuItem } from './menu-item.model';
 
 @Component({
@@ -18,7 +19,8 @@ export class NavComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private ResetService: ResetService
     ) { }
 
     ngOnInit() {
@@ -44,11 +46,24 @@ export class NavComponent implements OnInit {
                 isVisible: () => !this.authService.isLoggedInValue()
             },
             {
+                caption: 'Reset Data',
+                link: null,
+                class: 'fa-undo',
+                isVisible: () => this.authService.isLoggedInValue(),
+                onClick: (event: Event) => {
+                    event.preventDefault();
+                    this.ResetService.reset();
+                }
+            },
+            {
                 caption: 'Logout',
                 link: null,
                 class: 'fa-sign-out',
                 isVisible: () => this.authService.isLoggedInValue(),
-                onClick: () => this.authService.logout()
+                onClick: (event: Event) => {
+                    event.preventDefault();
+                    this.authService.logout();
+                }
             }
         ];
         this.authService.isLoggedIn().subscribe(this.onLoginStatusChange);

@@ -46,7 +46,7 @@ Login Credentials:
 - [X] Implement 404 and Unauthorized pages
 - [ ] Use enableProdMode in production
 - [ ] Add HMR for Express
-- [ ] Implement modal and canDeactivate guard when leaving Edit/Create page
-- [ ] Add support for data reset
+- [X] Implement modal and canDeactivate guard when leaving Edit/Create page
+- [X] Add support for data reset
 - [ ] Implement Pager component for List page
 - [ ] Implement filtering for List page

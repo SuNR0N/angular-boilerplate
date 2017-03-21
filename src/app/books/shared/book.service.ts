@@ -1,26 +1,31 @@
 import { Injectable } from '@angular/core';
 import { Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 import { AuthHttp } from 'angular2-jwt';
 
 import { IBook, Book } from './book.model';
 import { IHATEOASLink } from '../../core/hateoas/hateoas-link.model';
 import { HATEOASPageResource } from '../../core/hateoas/hateoas-page-resource.model';
-import { CONFIG, ExceptionService } from '../../core';
+import { CONFIG, ExceptionService, ResetService } from '../../core';
 
 const booksUrl = CONFIG.baseUrls.books;
 
 @Injectable()
 export class BookService {
+    onReset: Subject<number>;
+
     private options: RequestOptions;
 
     constructor(
         private http: AuthHttp,
-        private exceptionService: ExceptionService
+        private exceptionService: ExceptionService,
+        private resetService: ResetService
     ) {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         this.options = new RequestOptions({ headers });
+        this.onReset = this.resetService.resetCountSubject;
     }
 
     createBook(book: IBook) {

@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { ModalModule } from './modal/modal.module';
 
-import { ToasterService, ExceptionService, LoggerService } from './';
+import { ToasterService, ExceptionService, LoggerService, ResetService } from './';
 import { AuthService } from './auth';
 import { AuthGuard, CanDeactivateGuard } from './guards';
 import { NavComponent } from './nav';
@@ -37,7 +37,8 @@ import { PageForbiddenComponent } from './page-forbidden/page-forbidden.componen
         AuthService,
         AuthGuard,
         CanDeactivateGuard,
-        ToasterService
+        ToasterService,
+        ResetService
     ]
 })
 export class CoreModule { }

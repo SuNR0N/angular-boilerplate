@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { LoggerService, ToasterService } from '../../core';
 import { BookService, BookRoutingService, Book } from '../shared';
@@ -10,10 +11,11 @@ import { ModalService } from '../../core/modal/modal.service';
     templateUrl: 'book-view.component.html',
     styleUrls: ['book-view.component.css']
 })
-export class BookViewComponent implements OnInit {
+export class BookViewComponent implements OnInit, OnDestroy {
     book: Book;
 
     private id: string;
+    private resetSubscription: Subscription;
 
     constructor(
         private modalService: ModalService,
@@ -31,6 +33,11 @@ export class BookViewComponent implements OnInit {
                 this.id = this.book.isbn;
             }
         );
+        this.resetSubscription = this.bookService.onReset.subscribe(() => this.getBook());
+    }
+
+    ngOnDestroy() {
+        this.resetSubscription.unsubscribe();
     }
 
     edit() {
@@ -68,5 +75,17 @@ export class BookViewComponent implements OnInit {
 
     deletable() {
         return this.book.hasLinkWithRel(Book.Links.Delete);
+    }
+
+    private getBook() {
+        this.bookService.getBook(this.id).subscribe(
+            (book) => {
+                this.book = book;
+            },
+            (error) => {
+                this.toasterService.error('Failed to retrieve book', 'Load Failed');
+                this.loggerService.log(error);
+            }
+        );
     }
 }

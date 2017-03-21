@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 import { LoggerService, ToasterService } from '../../core';
 import { ModalService } from '../../core/modal/modal.service';
@@ -9,8 +10,10 @@ import { BookService, BookRoutingService, Book } from '../shared';
     templateUrl: 'book-list.component.html',
     styleUrls: ['book-list.component.css']
 })
-export class BookListComponent implements OnInit {
+export class BookListComponent implements OnInit, OnDestroy {
     books: Book[];
+
+    private resetSubscription: Subscription;
 
     constructor(
         private modalService: ModalService,
@@ -22,6 +25,11 @@ export class BookListComponent implements OnInit {
 
     ngOnInit() {
         this.getBooks();
+        this.resetSubscription = this.bookService.onReset.subscribe(() => this.getBooks());
+    }
+
+    ngOnDestroy() {
+        this.resetSubscription.unsubscribe();
     }
 
     view(book: Book) {
