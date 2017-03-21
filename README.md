@@ -49,4 +49,4 @@ Login Credentials:
 - [X] Implement modal and canDeactivate guard when leaving Edit/Create page
 - [X] Add support for data reset
 - [ ] Implement Pager component for List page
-- [ ] Implement filtering for List page
+- [X] Implement filtering for List page
