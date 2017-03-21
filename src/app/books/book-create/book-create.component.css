@@ -1,0 +1,12 @@
+.container-fluid {
+    padding-top: 15px;
+}
+
+form label {
+    text-align: right;
+    font-weight: bold;
+}
+
+form label::after {
+    content: ":";
+}

@@ -1,79 +1,82 @@
-<h2>
-    <span class="title">{{ book.title }}</span>
-    by
-    <span class="author">{{ book.author }}</span>
-    <span class="badge badge-default">Edit</span>
-</h2>
+<div class="container-fluid">
+    <h2>
+        <span class="title">
+            {{ book.title }}
+            <span class="badge badge-default">Edit</span>
+        </span>
+        <span class="author">{{ book.author }}</span>
+    </h2>
 
-<hr>
+    <hr>
 
-<form [formGroup]="editBookForm"
-      novalidate
-      (ngSubmit)="save()">
-    <div class="form-group row">
-        <label class="col-2 col-form-label">ISBN</label>
-        <div class="col-10">
-            <p id="isbn-static"
-               class="form-control-static">{{ book.isbn }}</p>
+    <form [formGroup]="editBookForm"
+        novalidate
+        (ngSubmit)="save()">
+        <div class="form-group row">
+            <label class="col-2 col-form-label">ISBN</label>
+            <div class="col-10">
+                <p id="isbn-static"
+                class="form-control-static">{{ book.isbn }}</p>
+            </div>
         </div>
-    </div>
-    <div class="form-group row"
-         [ngClass]="{'has-danger': isTitleInvalid()}">
-        <label for="title-input"
-               class="col-2 col-form-label">Title</label>
-        <div class="col-10">
-            <input id="title-input"
-                   (ngModel)="book.title"
-                   formControlName="title"
-                   class="form-control form-control-danger"
-                   type="text">
-            <div id="title-feedback-required"
-                 *ngIf="isTitleRequired()"
-                 class="form-control-feedback">Title is required.</div>
+        <div class="form-group row"
+            [ngClass]="{'has-danger': isTitleInvalid()}">
+            <label for="title-input"
+                class="col-2 col-form-label">Title</label>
+            <div class="col-10">
+                <input id="title-input"
+                    (ngModel)="book.title"
+                    formControlName="title"
+                    class="form-control form-control-danger"
+                    type="text">
+                <div id="title-feedback-required"
+                    *ngIf="isTitleRequired()"
+                    class="form-control-feedback">Title is required.</div>
+            </div>
         </div>
-    </div>
-    <div class="form-group row"
-         [ngClass]="{'has-danger': isAuthorInvalid()}">
-        <label for="author-input"
-               class="col-2 col-form-label">Author</label>
-        <div class="col-10">
-            <input id="author-input"
-                   (ngModel)="book.author"
-                   formControlName="author"
-                   class="form-control form-control-danger"
-                   type="text">
-            <div id="author-feedback-required"
-                 *ngIf="isAuthorRequired()"
-                 class="form-control-feedback">Author is required.</div>
+        <div class="form-group row"
+            [ngClass]="{'has-danger': isAuthorInvalid()}">
+            <label for="author-input"
+                class="col-2 col-form-label">Author</label>
+            <div class="col-10">
+                <input id="author-input"
+                    (ngModel)="book.author"
+                    formControlName="author"
+                    class="form-control form-control-danger"
+                    type="text">
+                <div id="author-feedback-required"
+                    *ngIf="isAuthorRequired()"
+                    class="form-control-feedback">Author is required.</div>
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="publicationDate-input"
-               class="col-2 col-form-label">Publication Date</label>
-        <div class="col-10">
-            <input id="publicationDate-input"
-                   (ngModel)="book.publicationDate"
-                   formControlName="publicationDate"
-                   class="form-control"
-                   type="date">
+        <div class="form-group row">
+            <label for="publicationDate-input"
+                class="col-2 col-form-label">Publication Date</label>
+            <div class="col-10">
+                <input id="publicationDate-input"
+                    (ngModel)="book.publicationDate"
+                    formControlName="publicationDate"
+                    class="form-control"
+                    type="date">
+            </div>
         </div>
-    </div>
 
-    <div class="fixed-bottom text-center">
-        <button id="cancel-button"
-                type="button"
-                (click)="cancel()"
-                class="btn btn-secondary">
-                <i class="fa fa-ban"
-                   aria-hidden="true"></i> Cancel
-        </button>
-        <button id="save-button"
-                *ngIf="saveable()"
-                type="submit"
-                [disabled]="isFormInvalid()"
-                class="btn btn-primary">
-                <i class="fa fa-floppy-o"
-                   aria-hidden="true"></i> Save
-        </button>
-    </div>
-</form>
+        <div class="fixed-bottom text-center">
+            <button id="cancel-button"
+                    type="button"
+                    (click)="cancel()"
+                    class="btn btn-secondary">
+                    <i class="fa fa-ban"
+                    aria-hidden="true"></i> Cancel
+            </button>
+            <button id="save-button"
+                    *ngIf="saveable()"
+                    type="submit"
+                    [disabled]="isFormInvalid()"
+                    class="btn btn-primary">
+                    <i class="fa fa-floppy-o"
+                    aria-hidden="true"></i> Save
+            </button>
+        </div>
+    </form>
+</div>

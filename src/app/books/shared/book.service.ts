@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
+import { Response, Headers, RequestOptions, RequestMethod, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
@@ -53,9 +53,13 @@ export class BookService {
             .catch(this.exceptionService.catchErrorResponse);
     }
 
-    getBooks() {
+    getBooks(query?: string) {
+        let params = new URLSearchParams();
+        if (query) {
+            params.set('q', query);
+        }
         return <Observable<HATEOASPageResource<Book>>> this.http
-            .get(`${booksUrl}`)
+            .get(`${booksUrl}`, { search: params })
             .map((res: Response) => res.json())
             .map((json) => new HATEOASPageResource<Book>(Book).deserialize(json))
             .catch(this.exceptionService.catchErrorResponse);

@@ -47,9 +47,10 @@ function getBook (req, res) {
 }
 
 function getBooks (req, res) {
+    let query = req.query.q;
     let page = parseInt(req.query.page, 10);
     let pageSize = parseInt(req.query.size, 10);
-    let books = booksRepository.findAll();
+    let books = booksRepository.search(query);
     let hateoasBooksResponse = HATEOAS.wrapAsPageResource({
         content: HATEOAS.wrapResources({
             content: books,

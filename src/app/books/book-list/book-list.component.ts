@@ -32,6 +32,10 @@ export class BookListComponent implements OnInit, OnDestroy {
         this.resetSubscription.unsubscribe();
     }
 
+    filterByText(filterText: string) {
+        this.getBooks(filterText);
+    }
+
     view(book: Book) {
         this.bookRoutingService.gotoViewBook(book.isbn);
     }
@@ -74,9 +78,9 @@ export class BookListComponent implements OnInit, OnDestroy {
         return book.hasLinkWithRel(Book.Links.Delete);
     }
 
-    private getBooks() {
+    private getBooks(query?: string) {
         this.books = [];
-        this.bookService.getBooks().subscribe(
+        this.bookService.getBooks(query).subscribe(
             (response) => {
                 this.books = response.getCollection();
             },

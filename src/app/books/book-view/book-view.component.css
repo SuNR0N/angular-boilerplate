@@ -1,0 +1,23 @@
+.container-fluid {
+    padding-top: 15px;
+}
+
+h2 .author {
+    display: block;
+    font-size: 1.5rem;
+    font-style: italic;
+}
+
+h2 .author::before {
+    content: "by ";
+    font-style: normal;
+}
+
+form label {
+    text-align: right;
+    font-weight: bold;
+}
+
+form label::after {
+    content: ":";
+}

@@ -1,0 +1,20 @@
+.container-fluid {
+    padding-top: 15px;
+}
+
+.table {
+    margin-top: 15px;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+}
+
+.table td .action-buttons {
+    display: flex;
+}
+
+.table td .action-buttons button {
+    margin: 0 5px;
+}

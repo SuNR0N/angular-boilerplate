@@ -1,43 +1,50 @@
-<table class="table">
-    <thead>
-        <th>ISBN</th>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Publication Date</th>
-        <th>Action</th>
-    </thead>
-    <tbody>
-        <tr *ngFor="let book of books">
-            <td>{{ book.isbn }}</td>
-            <td>{{ book.title }}</td>
-            <td>{{ book.author }}</td>
-            <td>{{ book.publicationDate | date:'longDate' }}</td>
-            <td>
-                <button id="view-button"
-                        *ngIf="viewable(book)"
-                        type="button"
-                        class="btn btn-secondary"
-                        (click)="view(book)">
-                        <i class="fa fa-eye"
-                        aria-hidden="true"></i> View
-                </button>
-                <button id="edit-button"
-                        *ngIf="editable(book)"
-                        type="button"
-                        class="btn btn-primary"
-                        (click)="edit(book)">
-                        <i class="fa fa-pencil"
-                        aria-hidden="true"></i> Edit
-                </button>
-                <button id="delete-button"
-                        *ngIf="deletable(book)"
-                        type="button"
-                        class="btn btn-danger"
-                        (click)="delete(book)">
-                        <i class="fa fa-trash"
-                        aria-hidden="true"></i> Delete
-                </button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="container-fluid">
+    <na-search placeholder="Search by Title / Author / ISBN"
+               (onChange)="filterByText($event)"></na-search>
+
+    <table class="table table-bordered table-striped table-responsive">
+        <thead class="thead-inverse">
+            <th>ISBN</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Publication Date</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let book of books">
+                <td>{{ book.isbn }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.publicationDate | date:'longDate' }}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button id="view-button"
+                            *ngIf="viewable(book)"
+                            type="button"
+                            class="btn btn-secondary"
+                            (click)="view(book)">
+                            <i class="fa fa-eye"
+                            aria-hidden="true"></i> View
+                        </button>
+                        <button id="edit-button"
+                                *ngIf="editable(book)"
+                                type="button"
+                                class="btn btn-primary"
+                                (click)="edit(book)">
+                                <i class="fa fa-pencil"
+                                aria-hidden="true"></i> Edit
+                        </button>
+                        <button id="delete-button"
+                                *ngIf="deletable(book)"
+                                type="button"
+                                class="btn btn-danger"
+                                (click)="delete(book)">
+                                <i class="fa fa-trash"
+                                aria-hidden="true"></i> Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

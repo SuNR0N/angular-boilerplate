@@ -1,84 +1,86 @@
-<h2>New Book</h2>
+<div class="container-fluid">
+    <h2>New Book</h2>
 
-<hr>
+    <hr>
 
-<form [formGroup]="newBookForm"
-      novalidate
-      (ngSubmit)="save()">
-    <div class="form-group row"
-         [ngClass]="{'has-danger': isISBNInvalid()}">
-        <label for="isbn-input"
-               class="col-2 col-form-label">ISBN</label>
-        <div class="col-10">
-            <input id="isbn-input"
-                   formControlName="isbn"
-                   class="form-control form-control-danger"
-                   type="text">
-            <div id="isbn-feedback-required"
-                 *ngIf="isISBNRequired()"
-                 class="form-control-feedback">ISBN is required.</div>
-            <div id="isbn-feedback-invalid"
-                 *ngIf="isISBNFormatInvalid()"
-                 class="form-control-feedback">ISBN is invalid.</div>
-            <small class="form-text text-muted">International Standard Book Number in ISBN-10 or ISBN-13 format</small>
+    <form [formGroup]="newBookForm"
+        novalidate
+        (ngSubmit)="save()">
+        <div class="form-group row"
+            [ngClass]="{'has-danger': isISBNInvalid()}">
+            <label for="isbn-input"
+                class="col-2 col-form-label">ISBN</label>
+            <div class="col-10">
+                <input id="isbn-input"
+                    formControlName="isbn"
+                    class="form-control form-control-danger"
+                    type="text">
+                <div id="isbn-feedback-required"
+                    *ngIf="isISBNRequired()"
+                    class="form-control-feedback">ISBN is required.</div>
+                <div id="isbn-feedback-invalid"
+                    *ngIf="isISBNFormatInvalid()"
+                    class="form-control-feedback">ISBN is invalid.</div>
+                <small class="form-text text-muted">International Standard Book Number in ISBN-10 or ISBN-13 format</small>
+            </div>
         </div>
-    </div>
-    <div class="form-group row"
-         [ngClass]="{'has-danger': isTitleInvalid()}">
-        <label for="title-input"
-               class="col-2 col-form-label">Title</label>
-        <div class="col-10">
-            <input id="title-input"
-                   formControlName="title"
-                   class="form-control form-control-danger"
-                   type="text">
-            <div id="title-feedback-required"
-                 *ngIf="isTitleRequired()"
-                 class="form-control-feedback">Title is required.</div>
-            <small class="form-text text-muted">Name for the work which is usually chosen by the author</small>
+        <div class="form-group row"
+            [ngClass]="{'has-danger': isTitleInvalid()}">
+            <label for="title-input"
+                class="col-2 col-form-label">Title</label>
+            <div class="col-10">
+                <input id="title-input"
+                    formControlName="title"
+                    class="form-control form-control-danger"
+                    type="text">
+                <div id="title-feedback-required"
+                    *ngIf="isTitleRequired()"
+                    class="form-control-feedback">Title is required.</div>
+                <small class="form-text text-muted">Name for the work which is usually chosen by the author</small>
+            </div>
         </div>
-    </div>
-    <div class="form-group row"
-         [ngClass]="{'has-danger': isAuthorInvalid()}">
-        <label for="author-input"
-               class="col-2 col-form-label">Author</label>
-        <div class="col-10">
-            <input id="author-input"
-                   formControlName="author"
-                   class="form-control form-control-danger"
-                   type="text">
-            <div id="author-feedback-required"
-                 *ngIf="isAuthorRequired()"
-                 class="form-control-feedback">Author is required.</div>
-            <small class="form-text text-muted">Originator of the work</small>
+        <div class="form-group row"
+            [ngClass]="{'has-danger': isAuthorInvalid()}">
+            <label for="author-input"
+                class="col-2 col-form-label">Author</label>
+            <div class="col-10">
+                <input id="author-input"
+                    formControlName="author"
+                    class="form-control form-control-danger"
+                    type="text">
+                <div id="author-feedback-required"
+                    *ngIf="isAuthorRequired()"
+                    class="form-control-feedback">Author is required.</div>
+                <small class="form-text text-muted">Originator of the work</small>
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="publicationDate-input"
-               class="col-2 col-form-label">Publication Date</label>
-        <div class="col-10">
-            <input id="publicationDate-input"
-                   formControlName="publicationDate"
-                   class="form-control"
-                   type="date">
-            <small class="form-text text-muted">Date when the published material became generally available</small>
+        <div class="form-group row">
+            <label for="publicationDate-input"
+                class="col-2 col-form-label">Publication Date</label>
+            <div class="col-10">
+                <input id="publicationDate-input"
+                    formControlName="publicationDate"
+                    class="form-control"
+                    type="date">
+                <small class="form-text text-muted">Date when the published material became generally available</small>
+            </div>
         </div>
-    </div>
 
-    <div class="fixed-bottom text-center">
-        <button id="cancel-button"
-                type="button"
-                (click)="cancel()"
-                class="btn btn-secondary">
-                <i class="fa fa-ban"
-                   aria-hidden="true"></i> Cancel
-        </button>
-        <button id="save-button"
-                type="submit"
-                [disabled]="isFormInvalid()"
-                class="btn btn-primary">
-                <i class="fa fa-floppy-o"
-                   aria-hidden="true"></i> Save
-        </button>
-    </div>
-</form>
+        <div class="fixed-bottom text-center">
+            <button id="cancel-button"
+                    type="button"
+                    (click)="cancel()"
+                    class="btn btn-secondary">
+                    <i class="fa fa-ban"
+                    aria-hidden="true"></i> Cancel
+            </button>
+            <button id="save-button"
+                    type="submit"
+                    [disabled]="isFormInvalid()"
+                    class="btn btn-primary">
+                    <i class="fa fa-floppy-o"
+                    aria-hidden="true"></i> Save
+            </button>
+        </div>
+    </form>
+</div>
