@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { LoggerService, ToasterService } from '../../core';
+import { ModalService } from '../../core/modal/modal.service';
+import { ICanDeactivate } from '../../core/guards/can-deactivate-guard.service';
 import { BookService, BookRoutingService, IBook, Book } from '../shared';
 
 @Component({
@@ -11,7 +13,7 @@ import { BookService, BookRoutingService, IBook, Book } from '../shared';
     templateUrl: 'book-edit.component.html',
     styleUrls: ['book-edit.component.css']
 })
-export class BookEditComponent implements OnInit {
+export class BookEditComponent implements OnInit, ICanDeactivate {
     title: FormControl;
     author: FormControl;
     publicationDate: FormControl;
@@ -19,8 +21,10 @@ export class BookEditComponent implements OnInit {
     book: Book;
 
     private id: string;
+    private forceLeave: boolean;
 
     constructor(
+        private modalService: ModalService,
         private toasterService: ToasterService,
         private loggerService: LoggerService,
         private route: ActivatedRoute,
@@ -36,9 +40,15 @@ export class BookEditComponent implements OnInit {
                 this.id = this.book.isbn;
             }
         );
+        this.forceLeave = false;
+    }
+
+    canDeactivate() {
+        return this.forceLeave || !this.isDirty() || this.modalService.activate({});
     }
 
     cancel() {
+        this.forceLeave = true;
         this.location.back();
     }
 
@@ -51,6 +61,7 @@ export class BookEditComponent implements OnInit {
         };
         this.bookService.performActionOnBook(this.book, Book.Links.Edit, book).subscribe(
             (persistedBook: Book) => {
+                this.forceLeave = true;
                 this.toasterService.success(`${this.book.title} (${this.book.isbn}) has been successfully updated`, 'Successful Update');
                 this.bookRoutingService.gotoViewBook(persistedBook.isbn);
             },
@@ -83,6 +94,15 @@ export class BookEditComponent implements OnInit {
 
     isFormInvalid() {
         return this.editBookForm.invalid;
+    }
+
+    private isDirty() {
+        return !this.book.equals({
+            author: this.author.value,
+            isbn: this.book.isbn,
+            publicationDate: this.publicationDate.value,
+            title: this.title.value
+        });
     }
 
     private setEditBook(book: Book) {

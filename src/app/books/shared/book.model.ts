@@ -30,4 +30,15 @@ export class Book extends HATEOASResource implements IBook, ISerializable {
 
         return this;
     }
-}
+
+    equals(other: IBook): boolean {
+        if (!other) {
+            return false;
+        }
+
+        return this.isbn === other.isbn &&
+            this.title === other.title &&
+            this.author === other.author &&
+            this.publicationDate === other.publicationDate;
+    }
+ }

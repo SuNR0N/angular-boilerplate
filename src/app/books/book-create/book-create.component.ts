@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { LoggerService, ToasterService } from '../../core';
+import { ModalService } from '../../core/modal/modal.service';
+import { ICanDeactivate } from '../../core/guards/can-deactivate-guard.service';
 import { BookService, BookRoutingService, IBook, ISBNValidator } from '../shared';
 
 @Component({
@@ -9,7 +11,7 @@ import { BookService, BookRoutingService, IBook, ISBNValidator } from '../shared
     templateUrl: 'book-create.component.html',
     styleUrls: ['book-create.component.css']
 })
-export class BookCreateComponent {
+export class BookCreateComponent implements ICanDeactivate {
     isbn: FormControl;
     title: FormControl;
     author: FormControl;
@@ -17,12 +19,17 @@ export class BookCreateComponent {
     newBookForm: FormGroup;
 
     constructor(
+        private modalService: ModalService,
         private toasterService: ToasterService,
         private loggerService: LoggerService,
         private bookService: BookService,
         private bookRoutingService: BookRoutingService
     ) {
         this.createForm();
+    }
+
+    canDeactivate() {
+        return !this.newBookForm.dirty || this.modalService.activate({});
     }
 
     isISBNInvalid() {

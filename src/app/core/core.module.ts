@@ -3,8 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { ModalModule } from './modal/modal.module';
+
 import { ToasterService, ExceptionService, LoggerService } from './';
-import { AuthService, AuthGuard } from './auth';
+import { AuthService } from './auth';
+import { AuthGuard, CanDeactivateGuard } from './guards';
 import { NavComponent } from './nav';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { PageForbiddenComponent } from './page-forbidden/page-forbidden.component';
@@ -13,12 +16,14 @@ import { PageForbiddenComponent } from './page-forbidden/page-forbidden.componen
     imports: [
         CommonModule,
         FormsModule,
-        RouterModule
+        RouterModule,
+        ModalModule
     ],
     exports: [
         CommonModule,
         FormsModule,
         RouterModule,
+        ModalModule,
         NavComponent
     ],
     declarations: [
@@ -31,6 +36,7 @@ import { PageForbiddenComponent } from './page-forbidden/page-forbidden.componen
         LoggerService,
         AuthService,
         AuthGuard,
+        CanDeactivateGuard,
         ToasterService
     ]
 })

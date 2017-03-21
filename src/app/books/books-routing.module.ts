@@ -7,7 +7,7 @@ import { BookListComponent } from './book-list/book-list.component';
 import { BookViewComponent } from './book-view/book-view.component';
 import { BookEditComponent } from './book-edit/book-edit.component';
 import { BookResolverService } from './shared/book-resolver.service';
-import { AuthGuard } from '../core/auth';
+import { AuthGuard, CanDeactivateGuard } from '../core/guards';
 
 const routes: Routes = [
     {
@@ -21,7 +21,8 @@ const routes: Routes = [
             {
                 path: 'new',
                 component: BookCreateComponent,
-                canActivate: [AuthGuard]
+                canActivate: [AuthGuard],
+                canDeactivate: [CanDeactivateGuard]
             },
             {
                 path: ':id',
@@ -34,6 +35,7 @@ const routes: Routes = [
                 path: ':id/edit',
                 component: BookEditComponent,
                 canActivate: [AuthGuard],
+                canDeactivate: [CanDeactivateGuard],
                 resolve: {
                     book: BookResolverService
                 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { LoggerService, ToasterService } from '../../core';
+import { ModalService } from '../../core/modal/modal.service';
 import { BookService, BookRoutingService, Book } from '../shared';
 
 @Component({
@@ -12,6 +13,7 @@ export class BookListComponent implements OnInit {
     books: Book[];
 
     constructor(
+        private modalService: ModalService,
         private toasterService: ToasterService,
         private loggerService: LoggerService,
         private bookService: BookService,
@@ -39,16 +41,25 @@ export class BookListComponent implements OnInit {
     }
 
     delete(book: Book) {
-        this.bookService.performActionOnBook(book, Book.Links.Delete).subscribe(
-            () => {
-                this.toasterService.success(`${book.title} (${book.isbn}) has been successfully deleted`, 'Successful Deletion');
-                this.deleteBook(book);
-            },
-            (error) => {
-                this.toasterService.error(`Failed to delete book with ISBN ${book.isbn}`, 'Deletion Failed');
-                this.loggerService.log(error);
+        this.modalService.activate({
+            message: `Are you sure you want to delete ${book.title} (${book.isbn})?`,
+            okButtonText: 'Yes',
+            okButtonStyle: 'btn-danger',
+            cancelButtonText: 'No'
+        }).then((response) => {
+            if (response) {
+                this.bookService.performActionOnBook(book, Book.Links.Delete).subscribe(
+                    () => {
+                        this.toasterService.success(`${book.title} (${book.isbn}) has been successfully deleted`, 'Successful Deletion');
+                        this.deleteBook(book);
+                    },
+                    (error) => {
+                        this.toasterService.error(`Failed to delete book with ISBN ${book.isbn}`, 'Deletion Failed');
+                        this.loggerService.log(error);
+                    }
+                );
             }
-        );
+        });
     }
 
     deletable(book: Book) {

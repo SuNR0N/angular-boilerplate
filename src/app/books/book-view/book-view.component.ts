@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { LoggerService, ToasterService } from '../../core';
 import { BookService, BookRoutingService, Book } from '../shared';
+import { ModalService } from '../../core/modal/modal.service';
 
 @Component({
     selector: 'na-book-view',
@@ -15,6 +16,7 @@ export class BookViewComponent implements OnInit {
     private id: string;
 
     constructor(
+        private modalService: ModalService,
         private toasterService: ToasterService,
         private loggerService: LoggerService,
         private route: ActivatedRoute,
@@ -40,16 +42,28 @@ export class BookViewComponent implements OnInit {
     }
 
     delete() {
-        this.bookService.performActionOnBook(this.book, Book.Links.Delete).subscribe(
-            () => {
-                this.toasterService.success(`${this.book.title} (${this.book.isbn}) has been successfully deleted`, 'Successful Deletion');
-                this.bookRoutingService.gotoBooks();
-            },
-            (error) => {
-                this.toasterService.error(`Failed to delete book with ISBN ${this.book.isbn}`, 'Deletion Failed');
-                this.loggerService.log(error);
+        this.modalService.activate({
+            message: `Are you sure you want to delete this book?`,
+            okButtonText: 'Yes',
+            okButtonStyle: 'btn-danger',
+            cancelButtonText: 'No'
+        }).then((response) => {
+            if (response) {
+                this.bookService.performActionOnBook(this.book, Book.Links.Delete).subscribe(
+                    () => {
+                        this.toasterService.success(
+                            `${this.book.title} (${this.book.isbn}) has been successfully deleted`,
+                            'Successful Deletion'
+                        );
+                        this.bookRoutingService.gotoBooks();
+                    },
+                    (error) => {
+                        this.toasterService.error(`Failed to delete book with ISBN ${this.book.isbn}`, 'Deletion Failed');
+                        this.loggerService.log(error);
+                    }
+                );
             }
-        );
+        });
     }
 
     deletable() {
