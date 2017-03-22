@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SearchComponent } from './search/search.component';
+import { PagerComponent } from './pager/pager.component';
 
 @NgModule({
     imports: [
@@ -14,8 +15,12 @@ import { SearchComponent } from './search/search.component';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        SearchComponent
+        SearchComponent,
+        PagerComponent
     ],
-    declarations: [SearchComponent]
+    declarations: [
+        SearchComponent,
+        PagerComponent
+    ]
 })
 export class SharedModule { }

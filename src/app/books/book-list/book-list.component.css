@@ -13,6 +13,7 @@
 
 .table td .action-buttons {
     display: flex;
+    justify-content: center;
 }
 
 .table td .action-buttons button {

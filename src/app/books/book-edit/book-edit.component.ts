@@ -59,7 +59,7 @@ export class BookEditComponent implements OnInit, ICanDeactivate {
             publicationDate: this.publicationDate.value,
             title: this.title.value
         };
-        this.bookService.performActionOnBook(this.book, Book.Links.Edit, book).subscribe(
+        this.bookService.performActionOnResource(this.book, Book.Links.Edit, book).subscribe(
             (persistedBook: Book) => {
                 this.forceLeave = true;
                 this.toasterService.success(`${this.book.title} (${this.book.isbn}) has been successfully updated`, 'Successful Update');

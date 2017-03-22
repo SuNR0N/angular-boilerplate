@@ -1,9 +1,9 @@
-import { IHATEOASResource, HATEOASResource, ISerializable } from './';
+import { IHATEOASResource, HATEOASResource, ISerializable, IHATEOASLink } from './';
 
-const firstPageRel: string = 'first';
-const previousPageRel: string = 'prev';
-const nextPageRel: string = 'next';
-const lastPageRel: string = 'last';
+const firstPageRelName: string = 'first';
+const previousPageRelName: string = 'prev';
+const nextPageRelName: string = 'next';
+const lastPageRelName: string = 'last';
 
 export interface IHATEOASPageResource<T extends ISerializable> extends IHATEOASResource {
     _embedded: Map<string, T[]>;
@@ -12,10 +12,18 @@ export interface IHATEOASPageResource<T extends ISerializable> extends IHATEOASR
     totalItems: number;
 
     hasAnyPagingRels: () => boolean;
+    getFirstPageRelName: () => string;
     hasFirstPageRel: () => boolean;
+    getFirstPageRel: () => IHATEOASLink;
+    getPreviousPageRelName: () => string;
     hasPreviousPageRel: () => boolean;
+    getPreviousPageRel: () => IHATEOASLink;
+    getNextPageRelName: () => string;
     hasNextPageRel: () => boolean;
+    getNextPageRel: () => IHATEOASLink;
+    getLastPageRelName: () => string;
     hasLastPageRel: () => boolean;
+    getLastPageRel: () => IHATEOASLink;
     getCollection: () => T[];
 }
 
@@ -58,26 +66,58 @@ export class HATEOASPageResource<T extends ISerializable> extends HATEOASResourc
     }
 
     hasAnyPagingRels (): boolean {
-        return this._links.has(firstPageRel) ||
-            this._links.has(previousPageRel) ||
-            this._links.has(nextPageRel) ||
-            this._links.has(lastPageRel);
+        return this._links.has(firstPageRelName) ||
+            this._links.has(previousPageRelName) ||
+            this._links.has(nextPageRelName) ||
+            this._links.has(lastPageRelName);
+    }
+
+    getFirstPageRelName (): string {
+        return firstPageRelName;
     }
 
     hasFirstPageRel (): boolean {
-        return this._links.has(firstPageRel);
+        return this.hasLinkWithRel(firstPageRelName);
+    }
+
+    getFirstPageRel (): IHATEOASLink {
+        return this.getLinkWithRel(firstPageRelName);
+    }
+
+    getPreviousPageRelName (): string {
+        return previousPageRelName;
     }
 
     hasPreviousPageRel (): boolean {
-        return this._links.has(previousPageRel);
+        return this.hasLinkWithRel(previousPageRelName);
+    }
+
+    getPreviousPageRel (): IHATEOASLink {
+        return this.getLinkWithRel(previousPageRelName);
+    }
+
+    getNextPageRelName (): string {
+        return nextPageRelName;
     }
 
     hasNextPageRel (): boolean {
-        return this._links.has(nextPageRel);
+        return this.hasLinkWithRel(nextPageRelName);
+    }
+
+    getNextPageRel (): IHATEOASLink {
+        return this.getLinkWithRel(nextPageRelName);
+    }
+
+    getLastPageRelName (): string {
+        return lastPageRelName;
     }
 
     hasLastPageRel (): boolean {
-        return this._links.has(lastPageRel);
+        return this.hasLinkWithRel(lastPageRelName);
+    }
+
+    getLastPageRel (): IHATEOASLink {
+        return this.getLinkWithRel(lastPageRelName);
     }
 
     getCollection (): T[] {

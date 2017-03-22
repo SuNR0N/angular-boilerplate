@@ -37,16 +37,18 @@ Login Credentials:
 
 ### TODO
 
-- [ ] Implement unit tests
-- [ ] Implement e2e tests
-- [ ] Add proper styling using SASS
 - [X] Integrate font-awesome
 - [X] Investigate badge issue for Bootstrap 4
 - [X] Implement ToasterService
 - [X] Implement 404 and Unauthorized pages
-- [ ] Use enableProdMode in production
-- [ ] Add HMR for Express
 - [X] Implement modal and canDeactivate guard when leaving Edit/Create page
 - [X] Add support for data reset
-- [ ] Implement Pager component for List page
 - [X] Implement filtering for List page
+- [X] Implement Pager component for List page
+- [ ] Implement unit tests
+- [ ] Implement e2e tests
+- [ ] Add proper styling using SASS
+- [ ] Use enableProdMode in production
+- [ ] Add HMR for Express
+- [ ] Add Swagger spec
+- [ ] Implement responsive design

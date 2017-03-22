@@ -56,7 +56,7 @@ export class BookViewComponent implements OnInit, OnDestroy {
             cancelButtonText: 'No'
         }).then((response) => {
             if (response) {
-                this.bookService.performActionOnBook(this.book, Book.Links.Delete).subscribe(
+                this.bookService.performActionOnResource(this.book, Book.Links.Delete).subscribe(
                     () => {
                         this.toasterService.success(
                             `${this.book.title} (${this.book.isbn}) has been successfully deleted`,

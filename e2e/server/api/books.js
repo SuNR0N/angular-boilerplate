@@ -122,9 +122,7 @@ function createBook (req, res) {
             linkParametersMapping: { id: 'isbn' },
             request: req
         });
-        // Alternative Option: Return the URI of the new book resource in the Location header
-        // res.setHeader('Location', req.protocol + '://' + req.get('host') + req.originalUrl + '/' + newBook.isbn);
-        // res.status(HttpStatus.CREATED).end();
+        res.setHeader('Location', req.protocol + '://' + req.get('host') + req.originalUrl + '/' + newBook.isbn);
         res.status(HttpStatus.CREATED).json(hateoasBookResponse);
     }
 }

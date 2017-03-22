@@ -11,12 +11,14 @@ import { BookService, BookRoutingService, IBook, ISBNValidator } from '../shared
     templateUrl: 'book-create.component.html',
     styleUrls: ['book-create.component.css']
 })
-export class BookCreateComponent implements ICanDeactivate {
+export class BookCreateComponent implements OnInit, ICanDeactivate {
     isbn: FormControl;
     title: FormControl;
     author: FormControl;
     publicationDate: FormControl;
     newBookForm: FormGroup;
+
+    private forceLeave: boolean;
 
     constructor(
         private modalService: ModalService,
@@ -28,8 +30,12 @@ export class BookCreateComponent implements ICanDeactivate {
         this.createForm();
     }
 
+    ngOnInit() {
+        this.forceLeave = false;
+    }
+
     canDeactivate() {
-        return !this.newBookForm.dirty || this.modalService.activate({});
+        return this.forceLeave || !this.newBookForm.dirty || this.modalService.activate({});
     }
 
     isISBNInvalid() {
@@ -77,6 +83,7 @@ export class BookCreateComponent implements ICanDeactivate {
         };
         this.bookService.createBook(book).subscribe(
             (newBook) => {
+                this.forceLeave = true;
                 this.toasterService.success(`${newBook.title} (${newBook.isbn}) has been successfully created`, 'Successful Creation');
                 this.bookRoutingService.gotoViewBook(newBook.isbn);
             },

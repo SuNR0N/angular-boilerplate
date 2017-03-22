@@ -1,0 +1,11 @@
+.pager .page-link {
+    cursor: pointer;
+}
+
+.pager .page-link.page-progress {
+    cursor: default;
+}
+
+.pager .page-link.page-progress .page-total::before {
+    content: " / ";
+}

@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { LoggerService, ToasterService } from '../../core';
 import { ModalService } from '../../core/modal/modal.service';
 import { BookService, BookRoutingService, Book } from '../shared';
+import { HATEOASPageResource } from '../../core/hateoas/hateoas-page-resource.model';
 
 @Component({
     selector: 'na-book-list',
@@ -11,6 +12,7 @@ import { BookService, BookRoutingService, Book } from '../shared';
     styleUrls: ['book-list.component.css']
 })
 export class BookListComponent implements OnInit, OnDestroy {
+    booksResource: HATEOASPageResource<Book>;
     books: Book[];
 
     private resetSubscription: Subscription;
@@ -60,7 +62,7 @@ export class BookListComponent implements OnInit, OnDestroy {
             cancelButtonText: 'No'
         }).then((response) => {
             if (response) {
-                this.bookService.performActionOnBook(book, Book.Links.Delete).subscribe(
+                this.bookService.performActionOnResource(book, Book.Links.Delete).subscribe(
                     () => {
                         this.toasterService.success(`${book.title} (${book.isbn}) has been successfully deleted`, 'Successful Deletion');
                         this.deleteBook(book);
@@ -78,11 +80,25 @@ export class BookListComponent implements OnInit, OnDestroy {
         return book.hasLinkWithRel(Book.Links.Delete);
     }
 
+    onNavigate(rel: string) {
+        this.bookService.performActionOnResource(this.booksResource, rel).subscribe(
+            (response) => {
+                this.booksResource = new HATEOASPageResource<Book>(Book).deserialize(response);
+                this.books = this.booksResource.getCollection();
+            },
+            (error) => {
+                this.toasterService.error('Failed to retrieve books', 'Load Failed');
+                this.loggerService.log(error);
+            }
+        );
+    }
+
     private getBooks(query?: string) {
         this.books = [];
         this.bookService.getBooks(query).subscribe(
             (response) => {
-                this.books = response.getCollection();
+                this.booksResource = response;
+                this.books = this.booksResource.getCollection();
             },
             (error) => {
                 this.toasterService.error('Failed to retrieve books', 'Load Failed');

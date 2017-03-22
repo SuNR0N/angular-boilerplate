@@ -6,23 +6,24 @@ import { Subject } from 'rxjs/Subject';
 import { AuthHttp } from 'angular2-jwt';
 
 import { IBook, Book } from './book.model';
-import { IHATEOASLink } from '../../core/hateoas/hateoas-link.model';
+import { HATEOASService } from '../../core/hateoas/hateoas.service';
 import { HATEOASPageResource } from '../../core/hateoas/hateoas-page-resource.model';
 import { CONFIG, ExceptionService, ResetService } from '../../core';
 
 const booksUrl = CONFIG.baseUrls.books;
 
 @Injectable()
-export class BookService {
+export class BookService extends HATEOASService {
     onReset: Subject<number>;
 
     private options: RequestOptions;
 
     constructor(
-        private http: AuthHttp,
-        private exceptionService: ExceptionService,
+        http: AuthHttp,
+        exceptionService: ExceptionService,
         private resetService: ResetService
     ) {
+        super(http, exceptionService);
         let headers = new Headers({ 'Content-Type': 'application/json' });
         this.options = new RequestOptions({ headers });
         this.onReset = this.resetService.resetCountSubject;
@@ -53,11 +54,13 @@ export class BookService {
             .catch(this.exceptionService.catchErrorResponse);
     }
 
-    getBooks(query?: string) {
+    getBooks(query?: string, page: number = 0, size: number = 10) {
         let params = new URLSearchParams();
         if (query) {
             params.set('q', query);
         }
+        params.set('page', page.toString());
+        params.set('size', size.toString());
         return <Observable<HATEOASPageResource<Book>>> this.http
             .get(`${booksUrl}`, { search: params })
             .map((res: Response) => res.json())
@@ -70,13 +73,6 @@ export class BookService {
             .get(`${booksUrl}/${id}`)
             .map((res: Response) => res.json())
             .map((json) => new Book().deserialize(json))
-            .catch(this.exceptionService.catchErrorResponse);
-    }
-
-    performActionOnBook(book: Book, rel: string, body?: any) {
-        let link: IHATEOASLink = book.getLinkWithRel(rel);
-        return this.http.request(link.href, { method: link.method, body })
-            .map((res: Response) => res.json())
             .catch(this.exceptionService.catchErrorResponse);
     }
 }

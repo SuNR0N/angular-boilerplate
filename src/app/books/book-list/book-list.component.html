@@ -1,8 +1,11 @@
 <div class="container-fluid">
-    <na-search placeholder="Search by Title / Author / ISBN"
-               (onChange)="filterByText($event)"></na-search>
+    <div class="row no-gutters">
+        <na-search class="col-6"
+                   placeholder="Search by Title / Author / ISBN"
+                   (onChange)="filterByText($event)"></na-search>
+    </div>
 
-    <table class="table table-bordered table-striped table-responsive">
+    <table class="table table-bordered table-striped">
         <thead class="thead-inverse">
             <th>ISBN</th>
             <th>Title</th>
@@ -47,4 +50,8 @@
             </tr>
         </tbody>
     </table>
+
+    <na-pager id="books-pager"
+              [pageResource]="booksResource"
+              (onNavigate)="onNavigate($event)"></na-pager>
 </div>

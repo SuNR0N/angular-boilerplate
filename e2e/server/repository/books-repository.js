@@ -152,7 +152,7 @@ function findOne (key) {
 }
 
 function findAll () {
-    return books.sort((a, b) => a.isbn.localeCompare(b.isbn));
+    return books.sort((a, b) => a.title.localeCompare(b.title));
 }
 
 function search (query) {

@@ -1,0 +1,44 @@
+<nav [id]="id"
+     *ngIf="hasAnyPages()"
+     class="pager"
+     aria-label="Pager">
+    <ul class="pagination justify-content-center">
+        <li class="page-item text-primary"
+            [class.disabled]="!hasFirstPage()"
+            *ngIf="showBoundaryLinks">
+            <a id="{{id}}-first-page-button"
+               (click)="goFirstPage($event)"
+               class="page-link">{{ firstButtonText }}</a>
+        </li>
+        <li class="page-item text-primary"
+            [class.disabled]="!hasPreviousPage()">
+            <a id="{{id}}-previous-page-button"
+               (click)="goPreviousPage($event)"
+               class="page-link">{{ previousButtonText }}</a>
+        </li>
+        <li class="page-item disabled"
+            *ngIf="showProgress">
+            <a class="page-link page-progress">
+                <span id="{{id}}-current-page"
+                      *ngIf="showCurrentPage"
+                      class="page-current">{{ pageResource?.currentPage }}</span>
+                <span id="{{id}}-total-pages"
+                      *ngIf="showTotalPages"
+                      class="page-total">{{ pageResource?.totalPages }}</span>
+            </a>
+        </li>
+        <li class="page-item text-primary"
+            [class.disabled]="!hasNextPage()">
+            <a id="{{id}}-next-page-button"
+               (click)="goNextPage($event)"
+               class="page-link">{{ nextButtonText }}</a>
+        </li>
+        <li class="page-item text-primary"
+            [class.disabled]="!hasLastPage()"
+            *ngIf="showBoundaryLinks">
+            <a id="{{id}}-last-page-button"
+               (click)="goLastPage($event)"
+               class="page-link">{{ lastButtonText }}</a>
+        </li>
+    </ul>
+</nav>
