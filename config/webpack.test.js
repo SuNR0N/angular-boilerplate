@@ -13,8 +13,8 @@ module.exports = function (options) {
         devtool: 'inline-source-map',
         resolve: {
             extensions: ['.ts', '.js'],
-            modules: [ 
-                helpers.pathFromRoot('src'), 
+            modules: [
+                helpers.pathFromRoot('src'),
                 helpers.pathFromRoot('node_modules')
             ],
             alias: {
@@ -28,6 +28,8 @@ module.exports = function (options) {
                     test: /\.js$/,
                     loader: 'source-map-loader',
                     exclude: [
+                        helpers.pathFromRoot('node_modules/sinon'),
+                        helpers.pathFromRoot('node_modules/angular2-jwt'),
                         helpers.pathFromRoot('node_modules/rxjs'),
                         helpers.pathFromRoot('node_modules/@angular')
                     ]
@@ -56,7 +58,7 @@ module.exports = function (options) {
                 {
                     test: /\.css$/,
                     loader: [
-                        'to-string-loader', 
+                        'to-string-loader',
                         'css-loader'
                     ],
                     exclude: [ helpers.pathFromRoot('src/index.html') ]
@@ -64,7 +66,7 @@ module.exports = function (options) {
                 {
                     test: /\.scss$/,
                     loader: [
-                        'raw-loader', 
+                        'raw-loader',
                         'sass-loader'
                     ],
                     exclude: [ helpers.pathFromRoot('src/index.html') ]

@@ -3,20 +3,23 @@
      class="pager"
      aria-label="Pager">
     <ul class="pagination justify-content-center">
-        <li class="page-item text-primary"
+        <li id="{{id}}-first-page-item"
+            class="page-item text-primary"
             [class.disabled]="!hasFirstPage()"
             *ngIf="showBoundaryLinks">
-            <a id="{{id}}-first-page-button"
-               (click)="goFirstPage($event)"
+            <a id="{{id}}-first-page-link"
+               (click)="goFirstPage()"
                class="page-link">{{ firstButtonText }}</a>
         </li>
-        <li class="page-item text-primary"
+        <li id="{{id}}-previous-page-item"
+            class="page-item text-primary"
             [class.disabled]="!hasPreviousPage()">
-            <a id="{{id}}-previous-page-button"
-               (click)="goPreviousPage($event)"
+            <a id="{{id}}-previous-page-link"
+               (click)="goPreviousPage()"
                class="page-link">{{ previousButtonText }}</a>
         </li>
-        <li class="page-item disabled"
+        <li id="{{id}}-progress"
+            class="page-item disabled"
             *ngIf="showProgress">
             <a class="page-link page-progress">
                 <span id="{{id}}-current-page"
@@ -27,17 +30,19 @@
                       class="page-total">{{ pageResource?.totalPages }}</span>
             </a>
         </li>
-        <li class="page-item text-primary"
+        <li id="{{id}}-next-page-item"
+            class="page-item text-primary"
             [class.disabled]="!hasNextPage()">
-            <a id="{{id}}-next-page-button"
-               (click)="goNextPage($event)"
+            <a id="{{id}}-next-page-link"
+               (click)="goNextPage()"
                class="page-link">{{ nextButtonText }}</a>
         </li>
-        <li class="page-item text-primary"
+        <li id="{{id}}-last-page-item"
+            class="page-item text-primary"
             [class.disabled]="!hasLastPage()"
             *ngIf="showBoundaryLinks">
-            <a id="{{id}}-last-page-button"
-               (click)="goLastPage($event)"
+            <a id="{{id}}-last-page-link"
+               (click)="goLastPage()"
                class="page-link">{{ lastButtonText }}</a>
         </li>
     </ul>

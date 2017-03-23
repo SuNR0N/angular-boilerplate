@@ -20,7 +20,7 @@ export class NavComponent implements OnInit {
     constructor(
         private router: Router,
         private authService: AuthService,
-        private ResetService: ResetService
+        private resetService: ResetService
     ) { }
 
     ngOnInit() {
@@ -52,7 +52,7 @@ export class NavComponent implements OnInit {
                 isVisible: () => this.authService.isLoggedInValue(),
                 onClick: (event: Event) => {
                     event.preventDefault();
-                    this.ResetService.reset();
+                    this.resetService.reset();
                 }
             },
             {

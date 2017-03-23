@@ -2,9 +2,9 @@
   "compilerOptions": {
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": [ 
-        "es2015", 
-        "dom" 
+    "lib": [
+        "es2015",
+        "dom"
     ],
     "typeRoots": [
       "node_modules/@types"
@@ -25,6 +25,7 @@
   },
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "src/main-aot.ts"
   ]
 }

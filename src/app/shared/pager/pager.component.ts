@@ -32,7 +32,7 @@ export class PagerComponent {
         return this.pageResource && this.pageResource.hasFirstPageRel();
     }
 
-    goFirstPage(event: Event) {
+    goFirstPage() {
         this.onNavigate.emit(this.pageResource.getFirstPageRelName());
     }
 
@@ -40,7 +40,7 @@ export class PagerComponent {
         return this.pageResource && this.pageResource.hasPreviousPageRel();
     }
 
-    goPreviousPage(event: Event) {
+    goPreviousPage() {
         this.onNavigate.emit(this.pageResource.getPreviousPageRelName());
     }
 
@@ -48,7 +48,7 @@ export class PagerComponent {
         return this.pageResource && this.pageResource.hasNextPageRel();
     }
 
-    goNextPage(event: Event) {
+    goNextPage() {
         this.onNavigate.emit(this.pageResource.getNextPageRelName());
     }
 
@@ -56,7 +56,7 @@ export class PagerComponent {
         return this.pageResource && this.pageResource.hasLastPageRel();
     }
 
-    goLastPage(event: Event) {
+    goLastPage() {
         this.onNavigate.emit(this.pageResource.getLastPageRelName());
     }
 }
