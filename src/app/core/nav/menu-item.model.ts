@@ -1,4 +1,5 @@
 export interface IMenuItem {
+    id: string;
     caption: string;
     link: any[];
     class?: string;

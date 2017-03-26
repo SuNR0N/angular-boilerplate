@@ -5,6 +5,7 @@
             <li *ngFor="let item of leftMenuItems"
                 class="nav-item">
                 <a class="nav-link"
+                   [id]="item.id"
                    [class.disabled]="item.isDisabled()"
                    [routerLink]="item.link"
                    [routerLinkActiveOptions]="{exact:true}"
@@ -20,7 +21,8 @@
         <ul class="navbar-nav">
             <li *ngFor="let item of rightMenuItems"
                 class="nav-item">
-                <a *ngIf="!item.link"
+                <a [id]="item.id"
+                   *ngIf="!item.link"
                    class="nav-link"
                    (click)="item.onClick($event)"
                    href="">
@@ -29,7 +31,8 @@
                       [ngClass]="item.class"
                       aria-hidden="true"></i> {{ item.caption }}
                 </a>
-                <a *ngIf="item.link"
+                <a [id]="item.id"
+                   *ngIf="item.link"
                    class="nav-link"
                    href=""
                    [routerLink]="item.link"

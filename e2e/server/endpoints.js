@@ -1,13 +1,38 @@
-const baseUrl = '/api';
+class Route {
+    constructor(url, parent = null) {
+        this.url = url;
+        if (parent && !(parent instanceof Route)) {
+            throw new Error('Invalid parent');
+        }
+        this.parent = parent;
+    }
 
-const authenticate = `${baseUrl}/authenticate`;
-const bookResource = `${baseUrl}/books/:id`;
-const booksCollection = `${baseUrl}/books`;
-const booksReset = `${baseUrl}/books/reset-action`;
+    getParentUrl() {
+        return this.parent ? this.parent.getUrl() : '';
+    }
+
+    getLastSegment() {
+        return this.url.substr(this.url.lastIndexOf('/'));
+    }
+
+    getUrl() {
+        return this.getParentUrl() + this.url;
+    }
+
+    getSlash() {
+        return '/';
+    }
+}
+
+const apiRoute = new Route('/api');
+const authenticateRoute = new Route('/authenticate', apiRoute);
+const booksRoute = new Route('/books', apiRoute);
+const bookResourceRoute = new Route('/:id', booksRoute);
+const booksResetRoute = new Route('/reset-action', booksRoute);
 
 module.exports = {
-    authenticate,
-    bookResource,
-    booksCollection,
-    booksReset
+    authenticateRoute,
+    booksRoute,
+    bookResourceRoute,
+    booksResetRoute
 };

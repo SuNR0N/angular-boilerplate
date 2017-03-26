@@ -7,14 +7,13 @@ const state = require('./state');
 const helpers = require('../../config/helpers');
 const JWT = require('./utils/utils').JWT;
 
-const authApi = require('./api/authenticate');
-const booksApi = require('./api/books');
+const authenticateRouter = require('./routes/authenticate-router');
+const booksRouter = require('./routes/books-router');
 
 module.exports = (PORT) => {
     if (!PORT) {
         throw new Error('PORT must be defined');
     }
-
     const app = express();
 
     app.use(morgan('dev'));
@@ -41,18 +40,17 @@ module.exports = (PORT) => {
         next();
     });
 
+    // Serve static files from dist
     app.use('/', express.static(helpers.pathFromRoot('dist')));
 
-    // Authenticate
-    app.post(endpoints.authenticate, authApi.authenticate);
+    // Set up routers
+    app.use(endpoints.authenticateRoute.getUrl(), authenticateRouter);
+    app.use(endpoints.booksRoute.getUrl(), booksRouter);
 
-    // Books
-    app.get(endpoints.booksCollection, booksApi.getBooks);
-    app.get(endpoints.bookResource, booksApi.getBook);
-    app.put(endpoints.bookResource, booksApi.editBook);
-    app.post(endpoints.booksCollection, booksApi.createBook);
-    app.delete(endpoints.bookResource, booksApi.deleteBook);
-    app.post(endpoints.booksReset, booksApi.resetBooks);
+    // Rewrite virtual URLs to enable internal page navigation within the Angular application
+    app.get('*', (req, res) => {
+        res.status(200).sendFile(helpers.pathFromRoot('dist/index.html'));
+    });
 
     app.listen(PORT, 'localhost', () => {
         console.log(`Backend server is running at http://localhost:${PORT}`);

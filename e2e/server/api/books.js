@@ -2,24 +2,24 @@ const booksRepository = require('../repository/books-repository');
 const HttpStatus = require('../utils/utils').HttpStatus;
 const RequestMethod = require('../utils/utils').RequestMethod;
 const HATEOAS = require('../utils/utils').HATEOAS;
-const endpoints = require('../endpoints');
+const bookResourceRoute = require('../endpoints').bookResourceRoute;
 const state = require('../state');
 
 const Links = {
     Self: {
         rel: 'self',
-        href: endpoints.bookResource,
+        href: bookResourceRoute.getUrl(),
         method: RequestMethod.GET
     },
     Edit: {
         rel: 'edit',
-        href: endpoints.bookResource,
+        href: bookResourceRoute.getUrl(),
         method: RequestMethod.PUT,
         isApplicable: () => state.hasCurrentUser()
     },
     Delete: {
         rel: 'delete',
-        href: endpoints.bookResource,
+        href: bookResourceRoute.getUrl(),
         method: RequestMethod.DELETE,
         isApplicable: () => state.hasCurrentUser()
     }

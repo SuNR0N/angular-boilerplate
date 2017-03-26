@@ -26,12 +26,14 @@ export class NavComponent implements OnInit {
     ngOnInit() {
         this.leftMenuItems = this._leftMenuItems = [
             {
+                id: 'all-books-menu',
                 caption: 'All Books',
                 link: ['/books'],
                 class: 'fa-book',
                 isDisabled: () => false
             },
             {
+                id: 'create-book-menu',
                 caption: 'Create Book',
                 link: ['/books', 'new'],
                 class: 'fa-plus',
@@ -40,12 +42,14 @@ export class NavComponent implements OnInit {
         ];
         this._rightMenuItems = [
             {
+                id: 'login-menu',
                 caption: 'Login',
                 link: ['/login'],
                 class: 'fa-sign-in',
                 isVisible: () => !this.authService.isLoggedInValue()
             },
             {
+                id: 'reset-data-menu',
                 caption: 'Reset Data',
                 link: null,
                 class: 'fa-undo',
@@ -56,6 +60,7 @@ export class NavComponent implements OnInit {
                 }
             },
             {
+                id: 'logout-menu',
                 caption: 'Logout',
                 link: null,
                 class: 'fa-sign-out',
