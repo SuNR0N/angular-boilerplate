@@ -35,6 +35,38 @@ Open [http://localhost:3000](http://localhost:3000) in your favourite browser
 Login Credentials:
 > Username: john.doe, Password: password123
 
+### Additional commands
+
+```bash
+# list all available npm scripts
+npm run
+
+# creates a dev build
+npm run build:dev
+
+# creates a JIT compiled prod build
+npm run build:prod
+
+# creates an AOT compiled prod build
+npm run build:prod:aot
+
+# run unit tests and code coverage report
+npm test
+
+# run e2e tests
+# NOTE: requires built application within the dist directory
+npm run e2e
+
+# run unit tests and e2e tests against the JIT compiled prod build
+npm run ci:jit
+
+# run unit tests and e2e tests against the AOT compiled prod build
+npm run ci:aot
+
+# run unit tests and e2e tests against the JIT & AOT compiled prod builds
+npm run ci:all
+```
+
 ### TODO
 
 - [X] Integrate font-awesome
